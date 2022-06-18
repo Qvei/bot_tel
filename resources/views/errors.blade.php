@@ -1,5 +1,3 @@
-
-
 You have error in {{env('APP_NAME')}}
 <b>{{$time}}</b> 
 <b>Опис </b> <code>{{$description}}</code>
