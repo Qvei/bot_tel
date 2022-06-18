@@ -49,7 +49,7 @@ class Handler extends ExceptionHandler
                     'description' => $e->getMessage(),
                     'file' => $e->getFile(),
                     'line' => $e->getLine(),
-                ]
+                ];
                 \Illuminate\Support\Facades\Http::post('https://api.telegram.org/bot'.env('BOT_TOKEN').'/sendMessage',[
                 'chat_id' => env('CHAT_ID'),
                 'text' => view('errors', $errors),
