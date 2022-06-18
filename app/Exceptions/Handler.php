@@ -42,8 +42,9 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $errors = $e->getMessage();
+        
         $this->reportable(function (Throwable $e) {
+                $errors = $e->getMessage();
                 \Illuminate\Support\Facades\Http::post('https://api.telegram.org/bot'.env('BOT_TOKEN').'/sendMessage',[
                 'chat_id' => env('CHAT_ID'),
                 'text' => $errors. PHP_EOL . date('l jS \of F Y h:i:s A'),
