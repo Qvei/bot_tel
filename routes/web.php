@@ -13,10 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function () 
 	\Illuminate\Support\Facades\Http::post('https://api.telegram.org/bot'.env('BOT_TOKEN').'/sendMessage',[
 		'chat_id' => 1221534640,
-   		'text' => 'New test'
+   		'text' => 'New test',
+   		'parse_mod' => 'html'
 	]);
     return view('welcome');
 });
