@@ -21,6 +21,15 @@ class Telega {
             ]);
     }
 
+    public function sendButtons($chat_id, $message, $buttons=false){
+            return \Illuminate\Support\Facades\Http::post('https://api.telegram.org/bot' . env('BOT_TOKEN') . '/sendMessage',[
+                    'chat_id' => $chat_id,
+                    'text' => $message,
+                    'parse_mod' => 'html',
+                    'reply_markup' => $buttons,
+                ]);
+    }
+
     public function sendDocument($chat_id, $file){
             return \Illuminate\Support\Facades\Http::attach('document' . Storage::get('/public/123.png'), 'document.png')
                 ->post($url . env('BOT_TOKEN') . '/sendDocument',[

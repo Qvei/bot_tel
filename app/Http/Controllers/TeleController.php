@@ -22,20 +22,38 @@ class TeleController extends Controller
                 $send_data = [
                     'text'=>'Hi'
                 ];
+                $buttons = [
+                	'inline_keyboard' => [
+                		[
+                			[
+                				'text' => 'button1',
+                				'callback_query' => '1'
+                			],
+                		],
+                		[
+                			[
+                				'text' => 'button2',
+                				'callback_query' => '2'
+                			],
+                		],
+                	]
+                ]
                 break;
             default:
                 $send_data = [
                     'text'=>'Try another text'
                 ];
+                $buttons = [];
         }
         $send_data['chat_id']=$data['chat']['id'];
-        return $this->sendTelegram($method,$send_data);
+        return $this->sendTelegram($method,$send_data,$buttons);
     }
 
-    private function sendTelegram($method,$data){
+    private function sendTelegram($method,$data,$buttons){
 
     	$telega = new Telega();
-    	return $telega->sendMessage($data['chat_id'], $data['text']);
+    	$telega->sendMessage($data['chat_id'], $data['text']);
+    	return $telega->sendButtons($data['chat_id'], $data['text'], $buttons);
 
     }
 
