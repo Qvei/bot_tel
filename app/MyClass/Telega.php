@@ -26,7 +26,7 @@ class Telega {
                     'chat_id' => $chat_id,
                     'text' => $message,
                     'parse_mod' => 'html',
-                    'reply_markup' => $buttons,
+                    'reply_markup' => json_encode($buttons),
                 ]);
     }
 
