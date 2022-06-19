@@ -37,7 +37,7 @@ class TeleController extends Controller
                 			],
                 		],
                 	]
-                ]
+                ];
                 break;
             default:
                 $send_data = [
