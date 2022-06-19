@@ -17,22 +17,22 @@ class TeleController extends Controller
 
         $message = mb_strtolower(($data['text'] ? $data['text'] : $data['data']) , 'utf-8' );
         $method = 'sendMessage';
-        // $buttons = [
-        //         	'inline_keyboard' => [
-        //         		[
-        //         			[
-        //         				'text' => 'button1',
-        //         				'callback_query' => '1'
-        //         			],
-        //         		],
-        //         		[
-        //         			[
-        //         				'text' => 'button2',
-        //         				'callback_query' => '2'
-        //         			],
-        //         		],
-        //         	]
-        //         ];
+        $buttons = [
+                	'inline_keyboard' => [
+                		[
+                			[
+                				'text' => 'button1',
+                				'callback_data' => '1'
+                			],
+                		],
+                		[
+                			[
+                				'text' => 'button2',
+                				'callback_data' => '2'
+                			],
+                		],
+                	]
+                ];
         switch ($message){
             case '/start':
                 $send_data = [
@@ -50,11 +50,11 @@ class TeleController extends Controller
         return $this->sendTelegram($method,$send_data);
     }
 
-    private function sendTelegram($method,$data){
+    private function sendTelegram($method,$data,$buttons){
 
     	$telega = new Telega();
-    	return $telega->sendMessage($data['chat_id'], $data['text']);
-    	// $telega->sendButtons($data['chat_id'], $data['text'], $buttons);
+    	$telega->sendMessage($data['chat_id'], $data['text']);
+    	return $telega->sendButtons($data['chat_id'], $data['text'], json_encode($buttons));
 
     }
 
