@@ -14,9 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function ()
+Route::get('/', function (){
 	// $message = '<h4>Hello</h4>';
 	// $telega = new Telega();
 	// $telega->sendMessage(env('CHAT_ID'), $message);
     return view('welcome');
 });
+
+
+Route::any('telegramsecret',
+    [\App\Http\Controllers\TeleController::class,
+        'get_data_from_tg']);
