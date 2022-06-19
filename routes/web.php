@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Telega;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,11 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function ()
-	\Illuminate\Support\Facades\Http::post('https://api.telegram.org/bot'.env('BOT_TOKEN').'/sendMessage',[
-		'chat_id' => env('CHAT_ID'),
-   		'text' => 'New test',
-   		'parse_mod' => 'html'
-	]);
+Route::get('/', function (){
+	$message = '<h4>Hello</h4>';
+	$telega = new Telega();
+	$telega->sendMessage(env('CHAT_ID'), $message);
     return view('welcome');
 });

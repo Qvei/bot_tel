@@ -13,9 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(Telega::class, function($app){
-            return new Telega();
-        });
+        // $this->app->bind(Telega::class, function($app){
+        //     return new Telega();
+        // });
     }
 
     /**
