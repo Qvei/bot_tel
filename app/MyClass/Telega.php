@@ -21,7 +21,7 @@ class Telega {
             ]);
     }
 
-    public function sendButtons($chat_id, $message, $buttons=false){
+    public function sendButtons($chat_id, $message, $buttons){
             return \Illuminate\Support\Facades\Http::post('https://api.telegram.org/bot' . env('BOT_TOKEN') . '/sendMessage',[
                     'chat_id' => $chat_id,
                     'text' => $message,
