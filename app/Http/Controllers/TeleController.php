@@ -52,7 +52,7 @@ class TeleController extends Controller
     private function sendTelegram($method,$data,$buttons){
 
     	$telega = new Telega();
-    	$telega->sendMessage($data['chat_id'], $data['text']);
+    	//$telega->sendMessage($data['chat_id'], $data['text']);
     	return $telega->sendButtons($data['chat_id'], $data['text'], $buttons);
 
     }
