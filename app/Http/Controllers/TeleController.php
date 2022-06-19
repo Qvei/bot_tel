@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TelegramController extends Controller
+class TeleController extends Controller
 {
     public function get_data_from_tg(){
         $content = file_get_contents("php://input");
