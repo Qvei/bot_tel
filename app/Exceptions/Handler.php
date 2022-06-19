@@ -4,17 +4,11 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
-//use App\MyClass\Telega;
+use App\MyClass\Telega;
 
 class Handler extends ExceptionHandler
 {
 
-    // protected $telega;
-
-    // public function __construct(Telega $telega){
-    //         $this->telega = $telega;
-
-    // }
     /**
      * A list of the exception types that are not reported.
      *
