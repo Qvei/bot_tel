@@ -47,11 +47,6 @@ class Handler extends ExceptionHandler
             $datet = date('l jS \of F Y h:i:s A') . PHP_EOL . $e->getMessage() . PHP_EOL . $e->getFile() . PHP_EOL . $e->getLine();
             $telega = new Telega();
             $telega->sendMessage(env('CHAT_ID'),$datet);
-            //     \Illuminate\Support\Facades\Http::post('https://api.telegram.org/bot'.env('BOT_TOKEN').'/sendMessage',[
-            //     'chat_id' => env('CHAT_ID'),
-            //     'text' => date('l jS \of F Y h:i:s A') . PHP_EOL . $e->getMessage() . PHP_EOL . $e->getFile() . PHP_EOL . $e->getLine(),
-            //     'parse_mod' => 'html',
-            // ]);
         });
     }
 }

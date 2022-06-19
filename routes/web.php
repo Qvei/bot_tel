@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Telega;
+use App\MyClass\Telega;
 
 /*
 |--------------------------------------------------------------------------
