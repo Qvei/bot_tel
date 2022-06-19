@@ -47,10 +47,10 @@ class TeleController extends Controller
                 //$buttons = [];
         }
         $send_data['chat_id']=$data['chat']['id'];
-        return $this->sendTelegram($method,$send_data,$buttons);
+        return $this->sendTelegram($method,$send_data);
     }
 
-    private function sendTelegram($method,$data,$buttons){
+    private function sendTelegram($method,$data){
 
     	$telega = new Telega();
     	return $telega->sendMessage($data['chat_id'], $data['text']);
