@@ -11,8 +11,7 @@ class Handler extends ExceptionHandler
 
     protected $telega;
 
-    public function __construct(Container $container, Telega $telega){
-            parent::construct($container);
+    public function __construct(Telega $telega){
             $this->telega = $telega;
 
     }
