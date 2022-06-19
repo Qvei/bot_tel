@@ -17,12 +17,7 @@ class TeleController extends Controller
 
         $message = mb_strtolower(($data['text'] ? $data['text'] : $data['data']) , 'utf-8' );
         $method = 'sendMessage';
-        switch ($message){
-            case '/start':
-                $send_data = [
-                    'text'=>'Hi'
-                ];
-                $buttons = [
+        $buttons = [
                 	'inline_keyboard' => [
                 		[
                 			[
@@ -38,12 +33,18 @@ class TeleController extends Controller
                 		],
                 	]
                 ];
+        switch ($message){
+            case '/start':
+                $send_data = [
+                    'text'=>'Hi'
+                ];
+                
                 break;
             default:
                 $send_data = [
                     'text'=>'Try another text'
                 ];
-                $buttons = [];
+                //$buttons = [];
         }
         $send_data['chat_id']=$data['chat']['id'];
         return $this->sendTelegram($method,$send_data,$buttons);
