@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
-use App\MyClass\Telega;
+//use App\MyClass\Telega;
 
 class Handler extends ExceptionHandler
 {
@@ -35,6 +35,20 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+    protected $telega;
+
+    public function __construct($telega){
+        $this->telega = $telega;
+
+    }
+
+    public function report(Throwable $e){
+        $datet = date('l jS \of F Y h:i:s A') . PHP_EOL . $e->getMessage() . PHP_EOL . $e->getFile() . PHP_EOL . $e->getLine();
+            //$telega = new Telega();
+            $this->telega->sendMessage(env('CHAT_ID'),$datet);
+        });
+    }
+
     /**
      * Register the exception handling callbacks for the application.
      *
@@ -44,9 +58,6 @@ class Handler extends ExceptionHandler
     {
         
         $this->reportable(function (Throwable $e) {
-            $datet = date('l jS \of F Y h:i:s A') . PHP_EOL . $e->getMessage() . PHP_EOL . $e->getFile() . PHP_EOL . $e->getLine();
-            $telega = new Telega();
-            $telega->sendMessage(env('CHAT_ID'),$datet);
-        });
-    }
+            //
+        }
 }

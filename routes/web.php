@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\MyClass\Telega;
+//use App\MyClass\Telega;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +14,9 @@ use App\MyClass\Telega;
 |
 */
 
-Route::get('/', function (){
-	$message = '<h4>Hello</h4>';
-	$telega = new Telega();
-	$telega->sendMessage(env('CHAT_ID'), $message);
+Route::get('/', function ()
+	// $message = '<h4>Hello</h4>';
+	// $telega = new Telega();
+	// $telega->sendMessage(env('CHAT_ID'), $message);
     return view('welcome');
 });
