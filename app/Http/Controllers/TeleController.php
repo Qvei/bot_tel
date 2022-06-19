@@ -47,7 +47,7 @@ class TeleController extends Controller
                 //$buttons = [];
         }
         $send_data['chat_id']=$data['chat']['id'];
-        return $this->sendTelegram($method,$send_data);
+        return $this->sendTelegram($method,$send_data,$buttons);
     }
 
     private function sendTelegram($method,$data,$buttons){
