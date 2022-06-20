@@ -21,7 +21,7 @@ class TeleController extends Controller
             $data = $dat['message'];
 	    }elseif(isset($dat['message']['location'])){
 	    	$data = $dat['message'];
-	    	dd($dat['message']['location']);
+	    	//dd($dat['message']['location']);
 	    }
 
         $message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
@@ -42,11 +42,38 @@ class TeleController extends Controller
                 		],
                 	]
                 ];
-        if($lock){
+        
+	        switch ($message){
+	            case '/start':
+	                $send_data = [
+	                    'text'=>'Hi'
+	                ];
+	                $knopki = true;
+	                break;
+	            case 'повітря':
 
-            $curl = curl_init();
+	            	// $buttons = [
+	             //    	'inline_keyboard' => [
+	             //    		[
+	             //    			[
+	             //    				'text' => 'Підтвердіть відправку',
+	             //    				'request_location' => true               		
+	             //    			],
+	                		
+	             //    			[
+	             //    				'text' => 'button2',
+	             //    				'callback_data' => '2'
+	             //    			],
+	             //    		],
+	             //    	]
+	             //    ];
+	             //    $send_data = [
+	             //        'text'=>'Необхідно підтвердити місцезнаходження'
+	             //    ];
+
+	            $curl = curl_init();
                     curl_setopt_array($curl, array(
-                    CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$data['location']['latitude']."&lon=".$data['location']['longitude']."&lang=uk&appid=".env('WEATHER_KEY'),
+                    CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=24.234234&lon=49.345345&lang=uk&appid=".env('WEATHER_KEY'),
                     CURLOPT_RETURNTRANSFER => true,
                                     CURLOPT_FOLLOWLOCATION => true,
                                     CURLOPT_ENCODING => "",
@@ -87,34 +114,6 @@ class TeleController extends Controller
 	                ];
 
 
-        }else{     
-	        switch ($message){
-	            case '/start':
-	                $send_data = [
-	                    'text'=>'Hi'
-	                ];
-	                $knopki = true;
-	                break;
-	            case 'повітря':
-
-	            	$buttons = [
-	                	'inline_keyboard' => [
-	                		[
-	                			[
-	                				'text' => 'Підтвердіть відправку',
-	                				'request_location' => true               		
-	                			],
-	                		
-	                			[
-	                				'text' => 'button2',
-	                				'callback_data' => '2'
-	                			],
-	                		],
-	                	]
-	                ];
-	                $send_data = [
-	                    'text'=>'Необхідно підтвердити місцезнаходження'
-	                ];
 	                break;
 	            default:
 	                $send_data = [
