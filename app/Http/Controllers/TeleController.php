@@ -43,7 +43,7 @@ class TeleController extends Controller
                 ];
                 $knopki = true;
                 break;
-            case ($message['data'] ==='повітря'):
+            case ($message ==='повітря'):
             	$curl = curl_init();
                     curl_setopt_array($curl, array(
                     CURLOPT_URL => $youadress = "http://api.openweathermap.org/data/2.5/air_pollution?lat=49.435345&lon=24.234243&lang=uk&appid=".env('WEATHER_KEY'),
