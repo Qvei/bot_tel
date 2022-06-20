@@ -38,7 +38,7 @@ class TeleController extends Controller
                 		],
                 	]
                 ];
-        if($message['location']['latitude'] !== false){
+        if($data['location']['latitude'] !== false){
 
             $curl = curl_init();
                     curl_setopt_array($curl, array(
