@@ -6,14 +6,14 @@ class Telega {
 
 
     //protected $http;
-    protected $url = 'https://api.telegram.org/bot';
+    //protected $url = 'https://api.telegram.org/bot';
 
     // public function __construct($http){
     //     $this->http = $http;
     // }
 
     public function sendMessage($chat_id, $message){
-            return \Illuminate\Support\Facades\Http::post($url . '' . env('BOT_TOKEN') . '/sendMessage',[
+            return \Illuminate\Support\Facades\Http::post('https://api.telegram.org/bot' . env('BOT_TOKEN') . '/sendMessage',[
                 'chat_id' => $chat_id,
                 'text' => $message,
                 'parse_mode' => 'HTML',
@@ -21,7 +21,7 @@ class Telega {
     }
 
     public function sendButtons($chat_id, $message, $buttons){
-            return \Illuminate\Support\Facades\Http::post($url . '' . env('BOT_TOKEN') . '/sendMessage',[
+            return \Illuminate\Support\Facades\Http::post('https://api.telegram.org/bot' . env('BOT_TOKEN') . '/sendMessage',[
                     'chat_id' => $chat_id,
                     'text' => $message,
                     'parse_mode' => 'HTML',
@@ -31,7 +31,7 @@ class Telega {
 
     public function sendDocument($chat_id, $file){
             return \Illuminate\Support\Facades\Http::attach('document' . Storage::get('/public/123.png'), 'document.png')
-                ->post($url . '' . env('BOT_TOKEN') . '/sendDocument',[
+                ->post('https://api.telegram.org/bot' . env('BOT_TOKEN') . '/sendDocument',[
                     'chat_id' => $chat_id,
                     // 'text' => $message,
                     // 'parse_mode' => 'html',
