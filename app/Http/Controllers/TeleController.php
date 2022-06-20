@@ -21,7 +21,7 @@ class TeleController extends Controller
             $data = $dat['message'];
 	    }elseif(isset($dat['message']['location'])){
 	    	$data = $dat['message'];
-	    	$lock = true;
+	    	dd($dat['message']['location']);
 	    }
 
         $message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
