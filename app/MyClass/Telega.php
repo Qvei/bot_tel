@@ -6,7 +6,7 @@ class Telega {
 
 
     //protected $http;
-    const $url = 'https://api.telegram.org/bot';
+    protected $url = 'https://api.telegram.org/bot';
 
     // public function __construct($http){
     //     $this->http = $http;
