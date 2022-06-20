@@ -38,17 +38,11 @@ class TeleController extends Controller
                 		],
                 	]
                 ];
-        switch ($message){
-            case '/start':
-                $send_data = [
-                    'text'=>'Hi'
-                ];
-                $knopki = true;
-                break;
-            case 'повітря':
-            	$curl = curl_init();
+        if($message['location'] !== false){
+
+            $curl = curl_init();
                     curl_setopt_array($curl, array(
-                    CURLOPT_URL => $youadress = "http://api.openweathermap.org/data/2.5/air_pollution?lat=49.435345&lon=24.234243&lang=uk&appid=".env('WEATHER_KEY'),
+                    CURLOPT_URL => $youadress = "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$message['location']['latitude']."&lon=".$message['location']['longitude']."&lang=uk&appid=".env('WEATHER_KEY'),
                     CURLOPT_RETURNTRANSFER => true,
                                     CURLOPT_FOLLOWLOCATION => true,
                                     CURLOPT_ENCODING => "",
@@ -87,12 +81,44 @@ class TeleController extends Controller
                     $send_data = [
 	                    'text'=> $ans,
 	                ];
-            	break;
-            default:
-                $send_data = [
-                    'text'=>'Try another text'
-                ];
-        }
+
+
+        }else{     
+	        switch ($message){
+	            case '/start':
+	                $send_data = [
+	                    'text'=>'Hi'
+	                ];
+	                $knopki = true;
+	                break;
+	            case 'повітря':
+
+	            	$buttons = [
+	                	'inline_keyboard' => [
+	                		[
+	                			[
+	                				'text' => 'Підтвердіть відправку',
+	                				'request_location' => true               		
+	                			],
+	                		
+	                			[
+	                				'text' => 'button2',
+	                				'callback_data' => '2'
+	                			],
+	                		],
+	                	]
+	                ];
+	                $send_data = [
+	                    'text'=>'Необхідно підтвердити місцезнаходження'
+	                ];
+	                break;
+	            default:
+	                $send_data = [
+	                    'text'=>'Try another text'
+	                ];
+	                break;
+	        }
+	    }
         $send_data['chat_id']= $data['chat']['id'] ?? $data['from']['id'];
         return $this->sendTelegram($method,$send_data,$buttons);
     }
