@@ -12,10 +12,11 @@ class TeleController extends Controller
         $knopki = false;
 
 
-        if(isset($dat['message']))
-            $data = $dat['message'];
+        
         if(isset($dat['callback_query']))
             $data = $dat['callback_query'];
+        if(isset($dat['message']))
+            $data = $dat['message'];
         
 
         $message = mb_strtolower(($data['text'] ? $data['text'] : $data['data']) , 'utf-8' );
