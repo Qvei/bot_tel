@@ -13,13 +13,14 @@ class TeleController extends Controller
 
 
         
-        if(isset($dat['callback_query']))
+        if(isset($dat['callback_query'])){
             $data = $dat['callback_query'];
-        if(isset($dat['message']))
+        }else{
+        	// (isset($dat['message']))
             $data = $dat['message'];
-        
+	    }
 
-        $message = mb_strtolower(($data['text'] ? $data['text'] : $data['data']) , 'utf-8' );
+        $message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
         $method = 'sendMessage';
         $buttons = [
                 	'inline_keyboard' => [
@@ -44,7 +45,7 @@ class TeleController extends Controller
                 ];
                 $knopki = true;
                 break;
-            case ($message ==='повітря'):
+            case 'повітря':
             	$curl = curl_init();
                     curl_setopt_array($curl, array(
                     CURLOPT_URL => $youadress = "http://api.openweathermap.org/data/2.5/air_pollution?lat=49.435345&lon=24.234243&lang=uk&appid=".env('WEATHER_KEY'),
@@ -92,13 +93,14 @@ class TeleController extends Controller
                     'text'=>'Try another text'
                 ];
         }
-        $send_data['chat_id']=$data['chat']['id'];
+        $send_data['chat_id']= $data['chat']['id'] ?? $data['from']['id'];
         return $this->sendTelegram($method,$send_data,$buttons);
     }
 
     private function sendTelegram($method,$data,$buttons){
 
     	$telega = new Telega();
+    	$text = $data['text'] ?? $data['message']['text'];
     	//$telega->sendMessage($data['chat_id'], $data['text']);
     	return $telega->sendButtons($data['chat_id'], $data['text'], json_encode($buttons));
 
