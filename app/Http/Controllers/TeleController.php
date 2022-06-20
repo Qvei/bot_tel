@@ -38,11 +38,11 @@ class TeleController extends Controller
                 		],
                 	]
                 ];
-        if($message['location'] !== false){
+        if($message['location']['latitude'] !== false){
 
             $curl = curl_init();
                     curl_setopt_array($curl, array(
-                    CURLOPT_URL => $youadress = "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$message['location']['latitude']."&lon=".$message['location']['longitude']."&lang=uk&appid=".env('WEATHER_KEY'),
+                    CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$message['location']['latitude']."&lon=".$message['location']['longitude']."&lang=uk&appid=".env('WEATHER_KEY'),
                     CURLOPT_RETURNTRANSFER => true,
                                     CURLOPT_FOLLOWLOCATION => true,
                                     CURLOPT_ENCODING => "",
