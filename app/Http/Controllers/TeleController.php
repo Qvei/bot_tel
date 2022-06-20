@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class TeleController extends Controller
 {
     public function get_data_from_tg(Request $request){
-        $content = file_get_contents($request->input());
+        $content = file_get_contents("php://input", true);
         $dat = json_decode($content, true);
         $knopki = false;
 
