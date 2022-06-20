@@ -6,15 +6,17 @@ use Illuminate\Http\Request;
 
 class TeleController extends Controller
 {
-    public function get_data_from_tg(){
-        $content = file_get_contents("php://input");
-        $data = json_decode($content, true);
+    public function get_data_from_tg(Request $request){
+        $content = file_get_contents($request->input());
+        $dat = json_decode($content, true);
         $knopki = false;
 
-        if(isset($data['callback_query']))
-            $data = $data['callback_query'];
-        if(isset($data['message']))
-            $data = $data['message'];
+
+        if(isset($dat['message']))
+            $data = $dat['message'];
+        if(isset($dat['callback_query']))
+            $data = $dat['callback_query'];
+        
 
         $message = mb_strtolower(($data['text'] ? $data['text'] : $data['data']) , 'utf-8' );
         $method = 'sendMessage';
@@ -41,7 +43,7 @@ class TeleController extends Controller
                 ];
                 $knopki = true;
                 break;
-            case 'повітря':
+            case ($message['data'] ==='повітря'):
             	$curl = curl_init();
                     curl_setopt_array($curl, array(
                     CURLOPT_URL => $youadress = "http://api.openweathermap.org/data/2.5/air_pollution?lat=49.435345&lon=24.234243&lang=uk&appid=".env('WEATHER_KEY'),
