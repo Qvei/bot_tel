@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 class TeleController extends Controller
 {
     public function get_data_from_tg(Request $request){
+    	$lock = false;
         $content = file_get_contents("php://input", true);
         $dat = json_decode($content, true);
         $knopki = false;
@@ -15,9 +16,12 @@ class TeleController extends Controller
         
         if(isset($dat['callback_query'])){
             $data = $dat['callback_query'];
-        }else{
+        }elseif(isset($dat['message']['text'])){
         	// (isset($dat['message']))
             $data = $dat['message'];
+	    }elseif(isset($dat['message']['location'])){
+	    	$data = $dat['message'];
+	    	$lock = true;
 	    }
 
         $message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
@@ -38,11 +42,11 @@ class TeleController extends Controller
                 		],
                 	]
                 ];
-        if($data['location']['latitude'] !== false){
+        if($lock){
 
             $curl = curl_init();
                     curl_setopt_array($curl, array(
-                    CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$message['location']['latitude']."&lon=".$message['location']['longitude']."&lang=uk&appid=".env('WEATHER_KEY'),
+                    CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$data['location']['latitude']."&lon=".$data['location']['longitude']."&lang=uk&appid=".env('WEATHER_KEY'),
                     CURLOPT_RETURNTRANSFER => true,
                                     CURLOPT_FOLLOWLOCATION => true,
                                     CURLOPT_ENCODING => "",
