@@ -19,8 +19,8 @@ class TeleController extends Controller
     	$content = Telegram::getWebhookUpdates();
 
 
-    	$lock = false;
-        $content = file_get_contents("php://input", true);
+    	//$lock = false;
+        //$content = file_get_contents("php://input", true);
         $dat = json_decode($content, true);
         $knopki = false;
 
@@ -43,6 +43,8 @@ class TeleController extends Controller
 
         //$message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
         $method = 'sendMessage';
+        $buttons = Keyboard::make()->inline();
+        $buttons->row(Keyboard::inlineButton(['text' => 'забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447), 'callback_data' => "location"]);
         $buttons = [
                 	'inline_keyboard' => [
 					                		[
@@ -56,7 +58,7 @@ class TeleController extends Controller
 	        switch ($message){
 	            case '/start':
 	                $send_data = [
-	                    'text'=>'Hi'
+	                    'text'=>'івень забруднення за місцем знаходження'
 	                ];
 	                break;
 	            case 'location':
@@ -122,16 +124,19 @@ class TeleController extends Controller
 	        }
 	    
         $send_data['chat_id'] = $chat_id;
+
         return $this->sendTelegram($method,$send_data,$buttons);
     }
 
     private function sendTelegram($method,$data,$buttons){
 
-    	$telega = new Telega();
-    	//$text = $data['text'];
-    	//$telega->sendMessage($data['chat_id'], $data['text']);
-    	return $telega->sendButtons($data['chat_id'], $data['text'], json_encode($buttons));
-
+    	return Telegram::sendMessage([
+        	'chat_id' => $data['chat_id'],
+                    'text' => $data['text'],
+                    'parse_mode' => 'HTML',
+                    'reply_markup' => json_encode($buttons),
+        ]);
+    	
     }
 
 }
