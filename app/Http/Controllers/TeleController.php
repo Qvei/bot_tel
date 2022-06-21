@@ -43,13 +43,7 @@ class TeleController extends Controller
 
         //$message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
         $method = 'sendMessage';
-        
-	        switch ($message){
-	            case '/start':
-	                $send_data = [
-	                    'text'=>'Hi'
-	                ];
-	                $buttons = [
+        $buttons = [
                 	'inline_keyboard' => [
 					                		[
 					                			[
@@ -59,10 +53,13 @@ class TeleController extends Controller
 					                		]
 					                	]
 					            ];
+	        switch ($message){
+	            case '/start':
+	                $send_data = [
+	                    'text'=>'Hi'
+	                ];
 	                break;
 	            case 'location':
-
-
 	            	$btn = Keyboard::button([
                     'text' => 'Підтвердіть відправку',
                     'request_location' => true]);
@@ -116,7 +113,6 @@ class TeleController extends Controller
                     $send_data = [
 	                    'text'=> $ans,
 	                ];
-	       
 	                break;
 	            default:
 	                $send_data = [
