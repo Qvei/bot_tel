@@ -19,7 +19,7 @@ class TeleController extends Controller
 
        
         }
-        if($dat['message']['location']['latitude'] !== false){
+        if($dat['message']['location'] !== false){
 
             $latitude = $dat['message']['location']['latitude'];
 	    	$longitude = $dat['message']['location']['longitude'];
@@ -70,7 +70,7 @@ class TeleController extends Controller
         			return $this->sendTelegram($method,$send_data,$buttons);
         			exit;
         	}
-        	
+
         	if(isset($dat['message']['text'])){
 
             $data = $dat['message']['text'];
