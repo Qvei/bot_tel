@@ -14,13 +14,19 @@ class TeleController extends Controller
 
 
         if(isset($dat['callback_query'])) {
+        	$message = mb_strtolower($dat['callback_query']['data'] , 'utf-8' );
             $data = $dat['callback_query'];
         }elseif(isset($dat['message'])){
+        	$message = mb_strtolower($dat['message']['text'] , 'utf-8' );
             $data = $dat['message'];
             
+        }elseif($dat['message']['location'] !== false){
+        	$message = 'getlocation'; 
+        	$latitude = $dat['message']['location']['latitude'];
+        	$longitude = $dat['message']['location']['longitude'];
         }
 
-        $message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
+        //$message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
         $method = 'sendMessage';
         $buttons = [
                 	'inline_keyboard' => [
@@ -65,6 +71,9 @@ class TeleController extends Controller
 	                		],
 	                	]
 	                ];
+	                $send_data = ['text' => 'text'];
+	                break;
+	            case 'getlocation':
 	                $curl = curl_init();
                     curl_setopt_array($curl, array(
                     CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=24.5656&lon=49.5656&lang=uk&appid=".env('WEATHER_KEY'),
