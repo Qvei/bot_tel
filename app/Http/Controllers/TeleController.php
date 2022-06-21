@@ -15,11 +15,10 @@ class TeleController extends Controller
 
         if(isset($dat['callback_query'])) {
             $data = $dat['callback_query'];
-        }elseif(isset($dat['message']['text'])){
+        }elseif(isset($dat['message'])){
             $data = $dat['message'];
             
-        }elseif($dat['message']['location'] !== false){
-      	}
+        }
 
         $message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
         $method = 'sendMessage';
@@ -42,7 +41,7 @@ class TeleController extends Controller
 
              
         
-	        switch ($data){
+	        switch ($message){
 	            case '/start':
 	                $send_data = [
 	                    'text'=>'Hi'
