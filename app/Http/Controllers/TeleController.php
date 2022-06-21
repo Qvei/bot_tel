@@ -45,7 +45,7 @@ class TeleController extends Controller
                 		[
                 			[
                 				'text' => 'забруднення',
-                				'callback_data' => 'getlocation'
+                				'callback_data' => 'location'
                 			],
                 		],
                 		[
