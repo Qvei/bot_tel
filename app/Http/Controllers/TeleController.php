@@ -28,7 +28,7 @@ class TeleController extends Controller
         if(isset($dat['callback_query'])) {
         	$message = mb_strtolower($dat['callback_query']['data'] , 'utf-8' );
             $data = $dat['callback_query'];
-        }elseif(isset($dat['message'])){
+        }elseif(isset($dat['message']['text'])){
         	$message = mb_strtolower($dat['message']['text'] , 'utf-8' );
             $data = $dat['message'];
             
