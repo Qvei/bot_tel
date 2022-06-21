@@ -66,7 +66,7 @@ class TeleController extends Controller
 	            	$url = "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$latitude."&lon=".$longitude."&lang=uk&appid=".env('WEATHER_KEY');
 	            	$wear = new NewClass($url);
 	                $ans = $wear->addaAnsver();
-	    //         	$url2 = "https://api.openweathermap.org/data/2.5/onecall?lat=".$latitude."&lon=".$longitude."&exclude=daily&lang=ua&appid=43e065ad26518fd849c6d783c39ab43b";
+	    //         	$url2 = "https://api.openweathermap.org/data/2.5/onecall?lat=".$latitude."&lon=".$longitude."&exclude=daily&lang=ua&appid=".env('WEATHER_KEY');
 					// $result = json_decode(file_get_contents($url), true);
 				
                     $send_data = [
