@@ -44,17 +44,17 @@ class TeleController extends Controller
         //$message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
         $method = 'sendMessage';
         $buttons = Keyboard::make()->inline();
-        $buttons->row(Keyboard::inlineButton(['text' => 'забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447), 'callback_data' => "location"]);
-        $buttons = [
-                	'inline_keyboard' => [
-					                		[
-					                			[
-					                				'text' => 'забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)),
-					                				'callback_data' => 'location'
-					                			],
-					                		]
-					                	]
-					            ];
+        $buttons->row(Keyboard::inlineButton(['text' => 'забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]));
+        // $buttons = [
+        //         	'inline_keyboard' => [
+					   //              		[
+					   //              			[
+					   //              				'text' => 'забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)),
+					   //              				'callback_data' => 'location'
+					   //              			],
+					   //              		]
+					   //              	]
+					   //          ];
 	        switch ($message){
 	            case '/start':
 	                $send_data = [
