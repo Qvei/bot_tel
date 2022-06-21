@@ -43,31 +43,22 @@ class TeleController extends Controller
 
         //$message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
         $method = 'sendMessage';
-        $buttons = [
-                	'inline_keyboard' => [
-                		[
-                			[
-                				'text' => 'забруднення',
-                				'callback_data' => 'location'
-                			],
-                		],
-                		[
-                			[
-                				'text' => 'button2',
-                				'callback_data' => '2'
-                			],
-                		],
-                	]
-                ];
-
-             
         
 	        switch ($message){
 	            case '/start':
 	                $send_data = [
 	                    'text'=>'Hi'
 	                ];
-	                //$knopki = true;
+	                $buttons = [
+                	'inline_keyboard' => [
+					                		[
+					                			[
+					                				'text' => 'забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)),
+					                				'callback_data' => 'location'
+					                			],
+					                		]
+					                	]
+					            ];
 	                break;
 	            case 'location':
 
@@ -81,23 +72,7 @@ class TeleController extends Controller
                     'one_time_keyboard' => true,
                     'hide_keyboard' => true 
                 	]);
-
-	            	// $buttons = [
-	             //    	'inline_keyboard' => [
-	             //    		[
-	             //    			[
-	             //    				'text' => 'Підтвердіть відправку',
-	             //    				'request_location' => true               		
-	             //    			],
-	                		
-	             //    			[
-	             //    				'text' => 'button2',
-	             //    				'callback_data' => '2'
-	             //    			],
-	             //    		],
-	             //    	]
-	             //    ];
-	                $send_data = ['text' => 'Ви тут'];
+	                $send_data = ['text' => 'Ви тут'.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447))];
 	                break;
 	            case 'getlocation':
 	                $curl = curl_init();
