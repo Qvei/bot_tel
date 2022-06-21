@@ -19,10 +19,29 @@ class TeleController extends Controller
 
        
         }
-        if($dat['message']['latitude'] !== false){
-
-            $latitude = $dat['message']['latitude'];;
-	    	$longitude = $dat['message']['longitude'];
+        // if(isset($dat['message']['text'])){
+        //     $data = $dat['message']['text'];
+        //     $chat_id = $dat['message']['chat']['id'];
+        // }
+        if($dat['message']['location'] !== false){
+        	$buttons = [
+                	'inline_keyboard' => [
+                		[
+                			[
+                				'text' => 'забруднення',
+                				'callback_data' => 'location'
+                			],
+                		],
+                		[
+                			[
+                				'text' => 'button2',
+                				'callback_data' => '2'
+                			],
+                		],
+                	]
+                ];
+            $latitude = $dat['message']['location']['latitude'];;
+	    	$longitude = $dat['message']['location']['longitude'];
 	    	$method = 'sendMessage';
 
 	    	$curl = curl_init();
@@ -52,7 +71,7 @@ class TeleController extends Controller
                         $vno = $val['components']['pm10'];
                         $ano = $val['components']['nh3'];      
                 }
-        if($ono == 1){
+        	if($ono == 1){
                         $ans = "<b>Рівень забрудненості повітря в цьому районі вважається задовільним</b> ".iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F603))."\n\nЗабруднення повітря становить невеликий ризик або взагалі не становить його.\n\n<b>Оновлено:</b> ".$tim."\n\n<b>Якість повітря (AQI)</b> ".$ono."\n<b>Монооксид вуглецю (CO)</b> ".$wno."\n<b>Нітроген діоксид (NO2)</b> ".$qno."\n<b>Концентрація озону (O3)</b> ".$xno."\n<b>Діокси́д сі́рки (SO2)</b> ".$cno."\n<b>Частки пилу PM2_5</b> ".$jno."\n<b>Частки пилу PM10</b> ".$vno."\n<b>Окси́д азо́ту(II)</b> ".$lno;
                     }elseif($ono == 2){
                         $ans = "<b>Рівень забрудненості повітря в цьому районі важається прийнятним</b> ".iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F60F))."\n\nОднак для деяких забруднювачів може існувати помірне занепокоєння щодо здоров'я дуже невеликої кількості людей, які надзвичайно чутливі до забруднення повітря.\n\n<b>Оновлено:</b> ".$tim."\n\n<b>Якість повітря (AQI)</b> ".$ono."\n<b>Монооксид вуглецю (CO)</b> ".$wno."\n<b>Нітроген діоксид (NO2)</b> ".$qno."\n<b>Концентрація озону (O3)</b> ".$xno."\n<b>Діокси́д сі́рки (SO2)</b> ".$cno."\n<b>Частки пилу PM2_5</b> ".$jno."\n<b>Частки пилу PM10</b> ".$vno."\n<b>Окси́д азо́ту(II)</b> ".$lno;
@@ -69,14 +88,6 @@ class TeleController extends Controller
 	                $send_data['chat_id'] = env('CHAT_ID');
         			return sendTelegram($method,$send_data,$buttons);
         			exit;
-        	}
-
-        	if(isset($dat['message']['text'])){
-
-            $data = $dat['message']['text'];
-            $chat_id = $dat['message']['chat']['id'];
-
-
         }
 
         //$message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
