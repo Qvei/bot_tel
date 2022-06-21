@@ -13,40 +13,24 @@ class TeleController extends Controller
         $knopki = false;
 
 
-        
-        if(isset($dat['callback_query'])){
-            $data = $dat['callback_query'];
+        if($dat->isType('callback_query')) {
+            $data = $dat['callback_query']['data'];
+            $chat_id = $dat['callback_query']['from']['id'];
+            
+
         }elseif(isset($dat['message']['text'])){
-        	// (isset($dat['message']))
-            $data = $dat['message'];
-	    }elseif($dat['message']['location'] !== false){
-	    	$latitude = $dat['message']['location']['latitude'];
+
+            $data = $dat['message']['text'];
+            $chat_id = $dat['message']['chat']['id'];
+
+       
+        }elseif($dat['message']['location'] !== false){
+
+            $latitude = $dat['message']['location']['latitude'];
 	    	$longitude = $dat['message']['location']['longitude'];
-	    	
-	                
-	    }
+	    	$method = 'sendMessage';
 
-        $message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
-        $method = 'sendMessage';
-        $buttons = [
-                	'inline_keyboard' => [
-                		[
-                			[
-                				'text' => 'забруднення',
-                				'callback_data' => 'location'
-                			],
-                		],
-                		[
-                			[
-                				'text' => 'button2',
-                				'callback_data' => '2'
-                			],
-                		],
-                	]
-                ];
-
-             if($dat['message']['location'] !== false){
-             	$curl = curl_init();
+	    	$curl = curl_init();
                     curl_setopt_array($curl, array(
                     CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$latitude."&lon=".$longitude."&lang=uk&appid=".env('WEATHER_KEY'),
                     CURLOPT_RETURNTRANSFER => true,
@@ -89,9 +73,32 @@ class TeleController extends Controller
 	                ];
 	                $send_data['chat_id'] = env('CHAT_ID');
         			return $this->sendTelegram($method,$send_data,$buttons);
-             }
+
+
+        }
+
+        //$message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
+        $method = 'sendMessage';
+        $buttons = [
+                	'inline_keyboard' => [
+                		[
+                			[
+                				'text' => 'забруднення',
+                				'callback_data' => 'location'
+                			],
+                		],
+                		[
+                			[
+                				'text' => 'button2',
+                				'callback_data' => '2'
+                			],
+                		],
+                	]
+                ];
+
+             
         
-	        switch ($message){
+	        switch ($data){
 	            case '/start':
 	                $send_data = [
 	                    'text'=>'Hi'
@@ -170,7 +177,7 @@ class TeleController extends Controller
 	                break;
 	        }
 	    
-        $send_data['chat_id']= $data['chat']['id'] ?? $data['from']['id'];
+        $send_data['chat_id']= $chat_id;
         return $this->sendTelegram($method,$send_data,$buttons);
     }
 
