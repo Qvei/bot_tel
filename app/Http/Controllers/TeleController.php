@@ -18,7 +18,8 @@ class TeleController extends Controller
             $chat_id = $dat['callback_query']['from']['id'];
 
        
-        }elseif($dat['message']['location']['latitude'] !== false){
+        }
+        if($dat['message']['location']['latitude'] !== false){
 
             $latitude = $dat['message']['location']['latitude'];
 	    	$longitude = $dat['message']['location']['longitude'];
@@ -68,7 +69,9 @@ class TeleController extends Controller
 	                $send_data['chat_id'] = env('CHAT_ID');
         			return $this->sendTelegram($method,$send_data,$buttons);
         			exit;
-        	}elseif(isset($dat['message']['text'])){
+        	}
+        	
+        	if(isset($dat['message']['text'])){
 
             $data = $dat['message']['text'];
             $chat_id = $dat['message']['chat']['id'];
