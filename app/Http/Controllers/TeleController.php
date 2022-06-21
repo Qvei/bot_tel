@@ -35,7 +35,6 @@ class TeleController extends Controller
             $data = $dat['message'];
             
         }elseif($dat['message']['location'] !== false){
-        	$message_id = ['message']['message_id'];
         	$chat_id = $dat['message']['chat']['id'];
         	$message = 'getlocation'; 
         	$latitude = $dat['message']['location']['latitude'];
