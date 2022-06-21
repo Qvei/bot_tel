@@ -99,7 +99,7 @@ class TeleController extends Controller
 	            case 'getlocation':
 	                $curl = curl_init();
                     curl_setopt_array($curl, array(
-                    CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=24.5656&lon=49.5656&lang=uk&appid=".env('WEATHER_KEY'),
+                    CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$latitude."&lon=".$longitude."&lang=uk&appid=".env('WEATHER_KEY'),
                     CURLOPT_RETURNTRANSFER => true,
                                     CURLOPT_FOLLOWLOCATION => true,
                                     CURLOPT_ENCODING => "",
