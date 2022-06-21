@@ -67,8 +67,8 @@ class TeleController extends Controller
 	            	$wear = new NewClass($url);
 	                $ans = $wear->addaAnsver();
 	            	$url2 = "https://api.openweathermap.org/data/2.5/onecall?lat=".$latitude."&lon=".$longitude."&exclude=daily&lang=ua&appid=".env('WEATHER_KEY');
-					$result = json_decode(file_get_contents($url), true);
-					$weather = "Температура повітря - ".round(floatval($result['current']['temp']) - 273.15); 
+					$re = json_decode(file_get_contents($url2), true);
+					$weather = "Температура повітря - ".round(floatval($re['current']['temp']) - 273.15); 
 					$ans .= "\n\n" . $weather;
                     $send_data = [
 	                    'text'=> $ans,
