@@ -13,7 +13,7 @@ class TeleController extends Controller
         $knopki = false;
 
 
-        if(isset($dat['callback_query']))) {
+        if(isset($dat['callback_query'])) {
             $data = $dat['callback_query']['data'];
             $chat_id = $dat['callback_query']['from']['id'];
             
