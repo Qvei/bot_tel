@@ -26,13 +26,16 @@ class TeleController extends Controller
 
 
         if(isset($dat['callback_query'])) {
+        	$chat_id = $dat['callback_query']['from']['id'];
         	$message = mb_strtolower($dat['callback_query']['data'] , 'utf-8' );
             $data = $dat['callback_query'];
         }elseif(isset($dat['message']['text'])){
+        	$chat_id = $dat['message']['chat']['id'];
         	$message = mb_strtolower($dat['message']['text'] , 'utf-8' );
             $data = $dat['message'];
             
         }elseif($dat['message']['location'] !== false){
+        	$chat_id = env('CHAT_ID');
         	$message = 'getlocation'; 
         	$latitude = $dat['message']['location']['latitude'];
         	$longitude = $dat['message']['location']['longitude'];
@@ -94,7 +97,7 @@ class TeleController extends Controller
 	             //    		],
 	             //    	]
 	             //    ];
-	                $send_data = ['text' => 'text'];
+	                $send_data = ['text' => 'Ви тут'];
 	                break;
 	            case 'getlocation':
 	                $curl = curl_init();
@@ -147,7 +150,7 @@ class TeleController extends Controller
 	                break;
 	        }
 	    
-        $send_data['chat_id'] = $data['chat']['id'] ?? $data['from']['id'];
+        $send_data['chat_id'] = $chat_id;
         return $this->sendTelegram($method,$send_data,$buttons);
     }
 
