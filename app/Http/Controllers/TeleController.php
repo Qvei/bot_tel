@@ -68,21 +68,32 @@ class TeleController extends Controller
 	                break;
 	            case 'location':
 
-	            	$buttons = [
-	                	'inline_keyboard' => [
-	                		[
-	                			[
-	                				'text' => 'Підтвердіть відправку',
-	                				'request_location' => true               		
-	                			],
+
+	            	$btn = Keyboard::button([
+                    'text' => 'Підтвердіть відправку',
+                    'request_location' => true]);
+                	$buttons = Keyboard::make([
+                    'keyboard' => [[$btn]],
+                    'resize_keyboard' => true,
+                    'one_time_keyboard' => true,
+                    'hide_keyboard' => true 
+                	]);
+
+	            	// $buttons = [
+	             //    	'inline_keyboard' => [
+	             //    		[
+	             //    			[
+	             //    				'text' => 'Підтвердіть відправку',
+	             //    				'request_location' => true               		
+	             //    			],
 	                		
-	                			[
-	                				'text' => 'button2',
-	                				'callback_data' => '2'
-	                			],
-	                		],
-	                	]
-	                ];
+	             //    			[
+	             //    				'text' => 'button2',
+	             //    				'callback_data' => '2'
+	             //    			],
+	             //    		],
+	             //    	]
+	             //    ];
 	                $send_data = ['text' => 'text'];
 	                break;
 	            case 'getlocation':
