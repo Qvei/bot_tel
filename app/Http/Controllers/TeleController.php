@@ -63,6 +63,10 @@ class TeleController extends Controller
                     $send_data = [
 	                    'text'=> $ans,
 	                ];
+	                $method = 'sendMessage';
+	                $send_data['chat_id']= $data['chat']['id'] ?? $data['from']['id'];
+        return $this->sendTelegram($method,$send_data,$buttons);
+        exit;
 	    }
 
         $message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
@@ -72,7 +76,7 @@ class TeleController extends Controller
                 		[
                 			[
                 				'text' => 'забруднення',
-                				'callback_data' => 'повітря'
+                				'callback_data' => 'location'
                 			],
                 		],
                 		[
@@ -91,7 +95,7 @@ class TeleController extends Controller
 	                ];
 	                //$knopki = true;
 	                break;
-	            case 'повітря':
+	            case 'location':
 
 	            	$buttons = [
 	                	'inline_keyboard' => [
@@ -170,7 +174,7 @@ class TeleController extends Controller
     private function sendTelegram($method,$data,$buttons){
 
     	$telega = new Telega();
-    	$text = $data['text'] ?? $data['message']['text'];
+    	//$text = $data['text'];
     	//$telega->sendMessage($data['chat_id'], $data['text']);
     	return $telega->sendButtons($data['chat_id'], $data['text'], json_encode($buttons));
 
