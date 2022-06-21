@@ -3,10 +3,22 @@
 namespace App\Http\Controllers;
 use App\MyClass\Telega;
 use Illuminate\Http\Request;
+use Telegram\Bot\Api;
+use Telegram;
+use Telegram\Bot\Actions;
+use Telegram\Bot\Commands\Command;
+use App\Inbox;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Keyboard\Keyboard;
 
 class TeleController extends Controller
 {
+
     public function get_data_from_tg(Request $request){
+
+    	$content = Telegram::getWebhookUpdates();
+
+
     	$lock = false;
         $content = file_get_contents("php://input", true);
         $dat = json_decode($content, true);
@@ -33,7 +45,7 @@ class TeleController extends Controller
                 		[
                 			[
                 				'text' => 'забруднення',
-                				'callback_data' => 'location'
+                				'callback_data' => 'getlocation'
                 			],
                 		],
                 		[
