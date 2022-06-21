@@ -22,7 +22,31 @@ class TeleController extends Controller
 	    }elseif($dat['message']['location'] !== false){
 	    	$latitude = $dat['message']['location']['latitude'];
 	    	$longitude = $dat['message']['location']['longitude'];
-	    	$curl = curl_init();
+	    	
+	                
+	    }
+
+        $message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
+        $method = 'sendMessage';
+        $buttons = [
+                	'inline_keyboard' => [
+                		[
+                			[
+                				'text' => 'забруднення',
+                				'callback_data' => 'location'
+                			],
+                		],
+                		[
+                			[
+                				'text' => 'button2',
+                				'callback_data' => '2'
+                			],
+                		],
+                	]
+                ];
+
+             if($dat['message']['location'] !== false){
+             	$curl = curl_init();
                     curl_setopt_array($curl, array(
                     CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$latitude."&lon=".$longitude."&lang=uk&appid=".env('WEATHER_KEY'),
                     CURLOPT_RETURNTRANSFER => true,
@@ -63,30 +87,9 @@ class TeleController extends Controller
                     $send_data = [
 	                    'text'=> $ans,
 	                ];
-	                $method = 'sendMessage';
-	                $send_data['chat_id']= $data['chat']['id'] ?? $data['from']['id'];
-        return $this->sendTelegram($method,$send_data,$buttons);
-        exit;
-	    }
-
-        $message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
-        $method = 'sendMessage';
-        $buttons = [
-                	'inline_keyboard' => [
-                		[
-                			[
-                				'text' => 'забруднення',
-                				'callback_data' => 'location'
-                			],
-                		],
-                		[
-                			[
-                				'text' => 'button2',
-                				'callback_data' => '2'
-                			],
-                		],
-                	]
-                ];
+	                $send_data['chat_id'] = env('CHAT_ID');
+        			return $this->sendTelegram($method,$send_data,$buttons);
+             }
         
 	        switch ($message){
 	            case '/start':
