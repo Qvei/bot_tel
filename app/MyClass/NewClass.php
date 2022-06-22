@@ -69,10 +69,8 @@ class NewClass{
 
                     $chas = '';
                     $desc = '';
-                    // $wea = '';
                     foreach ($wear_ans['hourly'] as $key => $value) {
                         $now = date('Y-m-d', $value['dt']);
-                        $tomorrow = date("Y-m-d", strtotime('tomorrow'));
                         $hour = date('H:i', $value['dt']);
                         $temp = round(floatval($value['temp']) - 273.15);
                         foreach ($value['weather'] as $k => $v) {
