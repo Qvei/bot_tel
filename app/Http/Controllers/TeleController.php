@@ -63,9 +63,9 @@ class TeleController extends Controller
 	                $send_data = ['text' => 'Ви тут'.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447))];
 	                break;
 	            case 'getlocation':
-	            	$api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
-	                $ans = $api_answers->addaAnsver();
-	            	$wear_ans = $api_answers->addWeatherAnswer(); // "https://api.openweathermap.org/data/2.5/onecall?lat=".$latitude."&lon=".$longitude."&exclude=daily&lang=ua&appid=".env('WEATHER_KEY');
+	            	$api_answers = new NewClass();
+	                $ans = $api_answers->addaAnsver($latitude, $longitude, env('WEATHER_KEY'));
+	            	$wear_ans = $api_answers->addWeatherAnswer($latitude, $longitude, env('WEATHER_KEY')); // "https://api.openweathermap.org/data/2.5/onecall?lat=".$latitude."&lon=".$longitude."&exclude=daily&lang=ua&appid=".env('WEATHER_KEY');
 					//$wear_ans = json_decode(file_get_contents($wear_url), true);
 					$ans_wear = "Температура повітря - ".round(floatval($wear_ans['current']['temp']) - 273.15); 
 					$ans .= "\n\n" . $ans_wear;
