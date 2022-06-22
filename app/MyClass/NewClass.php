@@ -13,17 +13,23 @@ use DB;
 
 class NewClass{
 
-	public $url;
+	
 
-	public function __construct($url){
-		$this->url = $url;
-	}
+	public $latitude;
+    public $longitude;
+    public $api_key;
+
+    public function __construct($latitude, $longitude, $api_key){
+     $this->latitude = $latitude;
+     $this->longitude = $longitude;
+     $this->api_key = $api_key;
+    }
         
     public function addaAnsver(){
 
         $curl = curl_init();
                     curl_setopt_array($curl, array(
-                    CURLOPT_URL => $this->url,
+                    CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key,
                     CURLOPT_RETURNTRANSFER => true,
                                     CURLOPT_FOLLOWLOCATION => true,
                                     CURLOPT_ENCODING => "",
@@ -59,5 +65,17 @@ class NewClass{
                     }elseif($ono == 5){
                         return "<b>Рівень забрудненості повітря в цьому районі надзвичайно поганий</b> ".iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F62D))."\n\nПопередження про стан здоров’я в надзвичайних ситуаціях. Все населення, швидше за все, постраждає.\n\n<b>Оновлено:</b> ".$tim."\n\n<b>Якість повітря (AQI)</b> ".$ono."\n<b>Монооксид вуглецю (CO)</b> ".$wno."\n<b>Нітроген діоксид (NO2)</b> ".$qno."\n<b>Концентрація озону (O3)</b> ".$xno."\n<b>Діокси́д сі́рки (SO2)</b> ".$cno."\n<b>Частки пилу PM2_5</b> ".$jno."\n<b>Частки пилу PM10</b> ".$vno."\n<b>Окси́д азо́ту(II)</b> ".$lno;
                     }
+    }
+
+
+     public function addWeatherAnswer(){
+        // $this->latitude = $latitude;
+        // $this->longitude = $longitude;
+        // $this->api_key = $api_key;
+        if(file_get_contents($wear_url)){
+            return json_decode(file_get_contents("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key), true);
+        }else{
+            return 'Неможу обробити запит...';
+        }
     }
 }
