@@ -69,21 +69,24 @@ class NewClass{
 
                     $chas = '';
                     $desc = '';
-                    $wear = '';
+                    // $wea = '';
                     foreach ($wear_ans['hourly'] as $key => $value) {
-                        $today = date('Y-m-d', $value['dt']);
+                        $now = date('Y-m-d', $value['dt']);
+                        $tomorrow = date("Y-m-d", strtotime('tomorrow'));
                         $hour = date('H:i', $value['dt']);
+                        $temp = round(floatval($value['temp']) - 273.15);
                         foreach ($value['weather'] as $k => $v) {
                             $description = $v['description'] ?? 'невідомо';
                         }
-                        if(date('Y-m-d') === $today){
+                        if(date('Y-m-d') === $now){
                             if (strpos($description, 'дощ') !== false) {
                                 $chas .= $hour.', ';
                             }
                         }
+                        $day_temp[] = $temp;
                         if($desc === ''){
                             $desc = $description;
-                            $wear = $value['temp'];
+                            $wear = $temp;
                         }
                     }
                     
@@ -92,7 +95,7 @@ class NewClass{
                     }else{
                         $rain = 'Сьогодні без дощу ';
                     }
-        $ans_wear = $desc." 🌡 ".round(floatval($wear) - 273.15)." °C \n\n" . $rain ."\n" . $chas;
+        $ans_wear = $desc." 🌡 ".$wear." °C \n\n" . $rain ."\n" . $chas. "\n min 🌡" . min($day_temp)." 🌕 \n max 🌡".max($day_temp)." ☀️";
         return $ans_wear;
     }
 }
