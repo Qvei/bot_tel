@@ -44,7 +44,8 @@ class TeleController extends Controller
         //$message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
         $method = 'sendMessage';
         $buttons = Keyboard::make()->inline();
-        $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]));
+        $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]),
+                      Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]));
         
 	        switch ($message){
 	            case '/start':
@@ -66,13 +67,15 @@ class TeleController extends Controller
 	            	$api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
 	                $ans = $api_answers->addaAnsver();
 	            	$wear_ans = $api_answers->addWeatherAnswer();
-                    
-					// $ans_wear = "Температура повітря 🌡 ".round(floatval($wear_ans['temp_current']) - 273.15).' °C'; 
-					// $ans .= "\n\n" . $ans_wear . "\n\n" . $wear_ans['rain'] . $wear_ans['chas'];
                     $send_data = [
 	                    'text'=> $ans."\n\n".$wear_ans,
 	                ];
 	                break;
+                case 'test':
+                    $send_data = [
+                        'text'=> 'TESTTTT',
+                    ];
+                    break;
 	            default:
 	                $send_data = [
 	                    'text'=>'Try another text'
