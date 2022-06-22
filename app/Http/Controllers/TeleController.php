@@ -74,7 +74,7 @@ class TeleController extends Controller
 	                break;
                 case 'test':
                     $send_data = [
-                        'text'=> 'TESTTTT',
+                        'text'=> 'https://epic.gsfc.nasa.gov/archive/natural/2022/06/21/png/epic_1b_20220621102538.png',
                     ];
                     break;
 	            default:
