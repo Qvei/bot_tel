@@ -63,13 +63,12 @@ class TeleController extends Controller
 	                $send_data = ['text' => 'Ви тут'.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447))];
 	                break;
 	            case 'getlocation':
-	            	$url = "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$latitude."&lon=".$longitude."&lang=uk&appid=".env('WEATHER_KEY');
-	            	$wear = new NewClass($url);
-	                $ans = $wear->addaAnsver();
-	            	$url2 = "https://api.openweathermap.org/data/2.5/onecall?lat=".$latitude."&lon=".$longitude."&exclude=daily&lang=ua&appid=".env('WEATHER_KEY');
-					$re = json_decode(file_get_contents($url2), true);
-					$weather = "Температура повітря - ".round(floatval($re['current']['temp']) - 273.15); 
-					$ans .= "\n\n" . $weather;
+	            	$api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
+	                $ans = $api_answers->addaAnsver();
+	            	$wear_ans = $api_answers->addWeatherAnswer(); // "https://api.openweathermap.org/data/2.5/onecall?lat=".$latitude."&lon=".$longitude."&exclude=daily&lang=ua&appid=".env('WEATHER_KEY');
+					//$wear_ans = json_decode(file_get_contents($wear_url), true);
+					$ans_wear = "Температура повітря - ".round(floatval($wear_ans['current']['temp']) - 273.15); 
+					$ans .= "\n\n" . $ans_wear;
                     $send_data = [
 	                    'text'=> $ans,
 	                ];
