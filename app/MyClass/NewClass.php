@@ -65,6 +65,26 @@ class NewClass{
 
 
     public function addWeatherAnswer(){
-        return json_decode(file_get_contents("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key), true); 
+        $wear_ans = json_decode(file_get_contents("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key), true);
+
+                    $chas = '';
+                    $wear = $wear_ans['current']['temp'];
+                    foreach ($wear_ans['hourly'] as $key => $value) {
+                        foreach ($value['weather'] as $k => $v) {
+                            $description = $v['description'] ?? 'невідомо';
+                            if(date('Y-m-d') === date('Y-m-d', $value['dt'])){
+                                if (strpos($description, 'дощ') !== false) {
+                                    $chas .= date('H:i', $value['dt']).', ';
+                                }
+                            }
+                        }
+                    }
+                    if($chas !== ''){
+                        $rain = 'Дощитиме о ';
+                    }else{
+                        $rain = 'Сьогодні без дощу ';
+                    }
+        $ans_wear = "Температура повітря 🌡 ".round(floatval($wear) - 273.15)." °C \n\n" . $rain ."\n" . $chas;
+        return $ans_wear;
     }
 }

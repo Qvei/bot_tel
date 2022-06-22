@@ -44,11 +44,11 @@ class TeleController extends Controller
         //$message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
         $method = 'sendMessage';
         $buttons = Keyboard::make()->inline();
-        $buttons->row(Keyboard::inlineButton(['text' => 'забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]));
+        $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]));
         
 	        switch ($message){
 	            case '/start':
-	                $send_data = [ 'text' => 'Рівень забруднення за місцем знаходження' ];
+	                $send_data = [ 'text' => 'Погода і рівень забруднення за місцем знаходження' ];
 	                break;
 	            case 'location':
 	            	$btn = Keyboard::button([
@@ -66,26 +66,11 @@ class TeleController extends Controller
 	            	$api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
 	                $ans = $api_answers->addaAnsver();
 	            	$wear_ans = $api_answers->addWeatherAnswer();
-                    $chas = '';
-                    foreach ($wear_ans['hourly'] as $key => $value) {
-                        foreach ($value['weather'] as $k => $v) {
-                            $description = $v['description'] ?? 'невідомо';
-                            if(date('Y-m-d') === date('Y-m-d', $value['dt'])){
-                                if (strpos($description, 'дощ') !== false) {
-                                    $chas .= date('H:i', $value['dt']).', ';
-                                }
-                            }
-                        }
-                    }
-                    if($chas !== ''){
-                        $rain = 'Дощитиме о ';
-                    }else{
-                        $rain = 'Сьогодні без дощу ';
-                    }
-					$ans_wear = "Температура повітря - ".round(floatval($wear_ans['current']['temp']) - 273.15); 
-					$ans .= "\n\n" . $ans_wear . "\n\n" . $rain . $chas;
+                    
+					// $ans_wear = "Температура повітря 🌡 ".round(floatval($wear_ans['temp_current']) - 273.15).' °C'; 
+					// $ans .= "\n\n" . $ans_wear . "\n\n" . $wear_ans['rain'] . $wear_ans['chas'];
                     $send_data = [
-	                    'text'=> $ans,
+	                    'text'=> $ans."\n\n".$wear_ans,
 	                ];
 	                break;
 	            default:
