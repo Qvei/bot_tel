@@ -70,9 +70,9 @@ class TeleController extends Controller
                     foreach ($wear_ans['hourly'] as $key => $value) {
                         foreach ($value['weather'] as $k => $v) {
                             $description = $v['description'] ?? 'невідомо';
-                            if(date('Y-m-d') === date('Y-m-d', $v['dt'])){
+                            if(date('Y-m-d') === date('Y-m-d', $value['dt'])){
                                 if (strpos($description, 'дощ') !== false) {
-                                    $chas .= date('H:i', $va['dt']).', ';
+                                    $chas .= date('H:i', $value['dt']).', ';
                                 }
                             }
                         }
