@@ -82,8 +82,9 @@ class NewClass{
                             if (strpos($description, 'дощ') !== false) {
                                 $chas .= $hour.', ';
                             }
+                            $day_temp[] = $temp;
                         }
-                        $day_temp[] = $temp;
+                        
                         if($desc === ''){
                             $desc = $description;
                             $wear = $temp;
