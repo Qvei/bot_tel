@@ -70,17 +70,19 @@ class NewClass{
                     $chas = '';
                     $wear = $wear_ans['current']['temp'];
                     foreach ($wear_ans['hourly'] as $key => $value) {
+                        $today = date('Y-m-d', $value['dt']);
+                        $hour = date('H:i', $value['dt']);
                         foreach ($value['weather'] as $k => $v) {
                             $description = $v['description'] ?? 'невідомо';
-                            if(date('Y-m-d') === date('Y-m-d', $value['dt'])){
+                            if(date('Y-m-d') === $today){
                                 if (strpos($description, 'дощ') !== false) {
-                                    $chas .= date('H:i', $value['dt']).', ';
+                                    $chas .= $hour.', ';
                                 }
                             }
                         }
                     }
                     if($chas !== ''){
-                        $rain = 'Дощитиме о ';
+                        $rain = '🌧️ Дощитиме о ';
                     }else{
                         $rain = 'Сьогодні без дощу ';
                     }
