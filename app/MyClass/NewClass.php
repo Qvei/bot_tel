@@ -4,12 +4,8 @@ use App;
 use Telegram;
 use Telegram\Bot\Api;
 use Telegram\Bot\Actions;
-use Telegram\Bot\Commands\Command;
 use Illuminate\Http\Request;
-use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Keyboard\Keyboard;
-use Carbon\Carbon;
-use DB;
 
 class NewClass{
 
@@ -68,8 +64,7 @@ class NewClass{
     }
 
 
-     public function addWeatherAnswer(){
-        return json_decode(file_get_contents("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key), true);
-        
+    public function addWeatherAnswer(){
+        return json_decode(file_get_contents("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key), true); 
     }
 }

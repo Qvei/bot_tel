@@ -65,10 +65,25 @@ class TeleController extends Controller
 	            case 'getlocation':
 	            	$api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
 	                $ans = $api_answers->addaAnsver();
-	            	$wear_ans = $api_answers->addWeatherAnswer(); // "https://api.openweathermap.org/data/2.5/onecall?lat=".$latitude."&lon=".$longitude."&exclude=daily&lang=ua&appid=".env('WEATHER_KEY');
-					//$wear_ans = json_decode(file_get_contents($wear_url), true);
+	            	$wear_ans = $api_answers->addWeatherAnswer();
+                    $chas = '';
+                    foreach ($wear_ans['hourly'] as $key => $value) {
+                        foreach ($value['weather'] as $k => $v) {
+                            $description = $v['description'] ?? 'невідомо';
+                            if(date('Y-m-d') === date('Y-m-d', $v['dt'])){
+                                if (strpos($description, 'дощ') !== false) {
+                                    $chas .= date('H:i', $va['dt']).', ';
+                                }
+                            }
+                        }
+                    }
+                    if($chas !== ''){
+                        $rain = 'Дощитиме о ';
+                    }else{
+                        $rain = 'Сьогодні без дощу ';
+                    }
 					$ans_wear = "Температура повітря - ".round(floatval($wear_ans['current']['temp']) - 273.15); 
-					$ans .= "\n\n" . $ans_wear;
+					$ans .= "\n\n" . $ans_wear . "\n\n" . $rain . $chas;
                     $send_data = [
 	                    'text'=> $ans,
 	                ];
