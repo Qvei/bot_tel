@@ -68,25 +68,31 @@ class NewClass{
         $wear_ans = json_decode(file_get_contents("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key), true);
 
                     $chas = '';
-                    $wear = $wear_ans['current']['temp'];
+                    $desc = '';
+                    $wear = '';
                     foreach ($wear_ans['hourly'] as $key => $value) {
                         $today = date('Y-m-d', $value['dt']);
                         $hour = date('H:i', $value['dt']);
                         foreach ($value['weather'] as $k => $v) {
                             $description = $v['description'] ?? 'невідомо';
-                            if(date('Y-m-d') === $today){
-                                if (strpos($description, 'дощ') !== false) {
-                                    $chas .= $hour.', ';
-                                }
+                        }
+                        if(date('Y-m-d') === $today){
+                            if (strpos($description, 'дощ') !== false) {
+                                $chas .= $hour.', ';
                             }
                         }
+                        if($desc === ''){
+                            $desc = $description;
+                            $wear = $value['temp'];
+                        }
                     }
+                    
                     if($chas !== ''){
                         $rain = '🌧️ Дощитиме о ';
                     }else{
                         $rain = 'Сьогодні без дощу ';
                     }
-        $ans_wear = "Температура повітря 🌡 ".round(floatval($wear) - 273.15)." °C \n\n" . $rain ."\n" . $chas;
+        $ans_wear = $desc." 🌡 ".round(floatval($wear) - 273.15)." °C \n\n" . $rain ."\n" . $chas;
         return $ans_wear;
     }
 }
