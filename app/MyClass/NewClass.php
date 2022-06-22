@@ -69,13 +69,7 @@ class NewClass{
 
 
      public function addWeatherAnswer(){
-        // $this->latitude = $latitude;
-        // $this->longitude = $longitude;
-        // $this->api_key = $api_key;
-        if(file_get_contents($wear_url)){
-            return json_decode(file_get_contents("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key), true);
-        }else{
-            return 'Неможу обробити запит...';
-        }
+        return json_decode(file_get_contents("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key), true);
+        
     }
 }
