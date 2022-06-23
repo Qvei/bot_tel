@@ -20,16 +20,15 @@ class TeleController extends Controller
 
         $message = $dat['callback_query']['data'] ?? $dat['message']['text'];
         mb_strtolower($message, 'utf-8');
-        // if(isset($dat['callback_query'])){
-        // 	//$chat_id = $dat['callback_query']['from']['id'];
-        // 	//$message = $dat['callback_query']['data'];
+        if(isset($dat['callback_query'])){
+        	//$chat_id = $dat['callback_query']['from']['id'];
+        	//$message = $dat['callback_query']['data'];
 
-        // }elseif(isset($dat['message']['text'])){
-        // 	//$chat_id = $dat['message']['chat']['id'];
-        //     //$message = $dat['message']['text'];
+        }elseif(isset($dat['message']['text'])){
+        	//$chat_id = $dat['message']['chat']['id'];
+            //$message = $dat['message']['text'];
 
-        // }else
-        if($dat['message']['location'] !== false){
+        }elseif($dat['message']['location'] !== false){
             $message = 'getlocation';
             //$chat_id = $dat['message']['chat']['id'];
             $latitude = $dat['message']['location']['latitude'];
