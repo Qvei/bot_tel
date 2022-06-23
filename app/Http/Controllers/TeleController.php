@@ -50,9 +50,6 @@ class TeleController extends Controller
             $longitude = $dat['message']['location']['longitude'];
         }
 
-
-$send_data['chat_id'] = $chat_id;
-$send_data['che'] = $ono;
 //$callback = mb_strtolower($dat['callback_query']['data'] ?? $dat['message']['text'], 'utf-8' );
 // if (strpos($callback, '|') !== false) {
 //     $mess = explode('|', $callback);
@@ -116,27 +113,30 @@ $send_data['che'] = $ono;
 	    
        // $send_data['chat_id'] = $chat_id;
 
+            $send_data['chat_id'] = $chat_id;
+            $send_data['che'] = $ono;
+
         return $this->sendTelegram($method,$send_data,$buttons);
     }
 
     private function sendTelegram($method,$data,$buttons){
 
-       //if($data['che'] === 1){
+       if($data['che'] === 1){
 
     	    return Telegram::sendMessage([
-        	       'chat_id' => env('CHAT_ID'), //$data['chat_id'],
+        	       'chat_id' => $data['chat_id'],
                     'text' => $data['text'],
                     'parse_mode' => 'HTML',
                     'reply_markup' => json_encode($buttons),
             ]);
-       // }else{
+        }else{
             return Telegram::editMessageText([
                         'chat_id' => $data['chat_id'],
                         'message_id' => $data['message_id'],
                         'text' => $data['text'],
                         'reply_markup' => json_encode($buttons),
             ]);
-      //  }
+        }
 
 
     	
