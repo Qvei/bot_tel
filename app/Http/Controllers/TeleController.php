@@ -101,7 +101,7 @@ class TeleController extends Controller
                         $buttons = Keyboard::make()->inline();
                         foreach ($respon['items'] as $items => $item) {
                             $title = $item['snippet']['title'];
-                            $shrt_title = preg_replace('/^([ ]+)|([ ]){2,}/m', '$2', $shrt_title);
+                            $shrt_title = preg_replace('/^([ ]+)|([ ]){2,}/m', '$2', $title);
                             $shrt_title = mb_substr($shrt_title, 0, 30);
                             
 
