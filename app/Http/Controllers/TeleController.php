@@ -18,24 +18,22 @@ class TeleController extends Controller
     	$content = Telegram::getWebhookUpdates();
         $dat = json_decode($content, true);
 
-        $message = $dat['callback_query']['data'] ?? $dat['message']['text'];
-        mb_strtolower($message, 'utf-8');
         if(isset($dat['callback_query'])){
-        	//$chat_id = $dat['callback_query']['from']['id'];
-        	//$message = $dat['callback_query']['data'];
+        	$chat_id = $dat['callback_query']['from']['id'];
+        	$message = $dat['callback_query']['data'];
 
         }elseif(isset($dat['message']['text'])){
-        	//$chat_id = $dat['message']['chat']['id'];
-            //$message = $dat['message']['text'];
+        	$chat_id = $dat['message']['chat']['id'];
+            $message = $dat['message']['text'];
 
         }elseif($dat['message']['location'] !== false){
             $message = 'getlocation';
-            //$chat_id = $dat['message']['chat']['id'];
+            $chat_id = $dat['message']['chat']['id'];
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
         }
 
-
+        $this->tolover($message);
         $buttons = Keyboard::make()->inline();
         $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]),
                       Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
@@ -64,11 +62,13 @@ class TeleController extends Controller
 	                break;
 	        }
 	
-            $send_data['chat_id'] = $dat['callback_query']['from']['id'] ?? $dat['message']['chat']['id'];
+            $send_data['chat_id'] = $chat_id;
         return $this->sendTelegram($send_data,$buttons);
     }
 
-
+    public function tolover($text){
+        return mb_strtolower($text, 'utf-8');
+    }
 
     private function sendTelegram($data,$buttons){
     	    return Telegram::sendMessage([
