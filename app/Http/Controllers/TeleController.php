@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\MyClass\CallbackMess;
+use App\MyClass\SimplyMess;
 use App\MyClass\NewClass;
 use Illuminate\Http\Request;
 use Telegram\Bot\Api;
@@ -19,54 +21,59 @@ class TeleController extends Controller
         $dat = json_decode($content, true);
 
         if(isset($dat['callback_query'])){
-            // $callback_cl = new CallbackMess($dat['callback_query']['from']['id'], $dat['callback_query']['data']);
-            // $send_data = $callback_cl->callmess(); 
-        	$chat_id = $dat['callback_query']['from']['id'];
-        	$message = $dat['callback_query']['data'];
+            $callback_cl = new CallbackMess($dat['callback_query']['from']['id'], $dat['callback_query']['data']);
+            $send_data = $callback_cl->callmess(); 
+        	// $chat_id = $dat['callback_query']['from']['id'];
+        	// $message = $dat['callback_query']['data'];
 
         }elseif(isset($dat['message']['text'])){
-            // $simplmes_cl = new SimplyMess($dat['message']['chat']['id'], $dat['message']['text']);
-            // $send_data = $simplmes_cl->simmess();
-        	$chat_id = $dat['message']['chat']['id'];
-            $message = $dat['message']['text'];
+            $simplmes_cl = new SimplyMess($dat['message']['chat']['id'], $dat['message']['text']);
+            $send_data = $simplmes_cl->simmess();
+        	// $chat_id = $dat['message']['chat']['id'];
+         //    $message = $dat['message']['text'];
 
         }elseif($dat['message']['location'] !== false){
-            $message = 'getlocation';
-            $chat_id = $dat['message']['chat']['id'];
+            
+            $send_data['chat_id'] = $dat['message']['chat']['id'];
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
+
+            $api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
+                    $ans = $api_answers->addaAnsver();
+                    $wear_ans = $api_answers->addWeatherAnswer();
+                    $send_data = ['text'=> $ans."\n\n".$wear_ans];
         }
 
-        $message = $this->tolover($message);
+        //$message = $this->tolover($message);
         $buttons = Keyboard::make()->inline();
         $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]),
                       Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
                       Keyboard::inlineButton(['text' => 'На сайт 🌍', 'url' => "https://info-misto.com/"]));
         
-	        switch ($message){
-	            case '/start':
-	                $send_data = [ 'text' => 'Погода і рівень забруднення за місцем знаходження' ];
-	                break;
-	            case 'location':
-	            	$btn = Keyboard::button(['text' => 'Підтвердіть відправку', 'request_location' => true]);
-                	$buttons = Keyboard::make(['keyboard' => [[$btn]], 'resize_keyboard' => true, 'one_time_keyboard' => true, 'hide_keyboard' => true]);
-	                $send_data = ['text' => 'Очікую підтвердження..'.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447))];
-	                break;
-	            case 'getlocation':
-	            	$api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
-	                $ans = $api_answers->addaAnsver();
-	            	$wear_ans = $api_answers->addWeatherAnswer();
-                    $send_data = ['text'=> $ans."\n\n".$wear_ans];
-	                break;
-                case 'test':
-                    $send_data = ['text'=> 'https://epic.gsfc.nasa.gov/archive/natural/2022/06/21/png/epic_1b_20220621102538.png'];
-                    break;
-	            default:
-	                $send_data = ['text'=>'Оберіть щоь..'];
-	                break;
-	        }
+	        // switch ($message){
+	        //     case '/start':
+	        //         $send_data = [ 'text' => 'Погода і рівень забруднення за місцем знаходження' ];
+	        //         break;
+	        //     case 'location':
+	        //     	$btn = Keyboard::button(['text' => 'Підтвердіть відправку', 'request_location' => true]);
+         //        	$buttons = Keyboard::make(['keyboard' => [[$btn]], 'resize_keyboard' => true, 'one_time_keyboard' => true, 'hide_keyboard' => true]);
+	        //         $send_data = ['text' => 'Очікую підтвердження..'.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447))];
+	        //         break;
+	        //     case 'getlocation':
+	        //     	$api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
+	        //         $ans = $api_answers->addaAnsver();
+	        //     	$wear_ans = $api_answers->addWeatherAnswer();
+         //            $send_data = ['text'=> $ans."\n\n".$wear_ans];
+	        //         break;
+         //        case 'test':
+         //            $send_data = ['text'=> 'https://epic.gsfc.nasa.gov/archive/natural/2022/06/21/png/epic_1b_20220621102538.png'];
+         //            break;
+	        //     default:
+	        //         $send_data = ['text'=>'Оберіть щоь..'];
+	        //         break;
+	        // }
 	
-            $send_data['chat_id'] = $chat_id;
+            //$send_data['chat_id'] = $chat_id;
         return $this->sendTelegram($send_data,$buttons);
     }
 
