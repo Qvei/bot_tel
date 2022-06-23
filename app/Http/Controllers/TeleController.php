@@ -26,7 +26,7 @@ class TeleController extends Controller
 
 
         if(isset($dat['callback_query'])) {
-        	// $chat_id = $dat['callback_query']['from']['id'];
+        	$chat_id = $dat['callback_query']['from']['id'];
         	// $message = mb_strtolower($dat['callback_query']['data'] , 'utf-8' );
          //    $data = $dat['callback_query'];
             $mess = explode('|', $dat['callback_query']['data']);
@@ -34,7 +34,7 @@ class TeleController extends Controller
             $send_data['message_id'] = $mess[1];
             $send_data['check'] = 0;
         }elseif(isset($dat['message']['text'])){
-        	// $chat_id = $dat['message']['chat']['id'];
+        	$chat_id = $dat['message']['chat']['id'];
         	// $message = mb_strtolower($dat['message']['text'] , 'utf-8' );
          //    $data = $dat['message'];
             $send_data['message_id'] = $dat['message']['message_id'];
@@ -42,6 +42,7 @@ class TeleController extends Controller
             $send_data['check'] = 1;
             
         }elseif($dat['message']['location'] !== false){
+            $chat_id = $dat['message']['chat']['id'];
             $send_data['message_id'] = $dat['message']['message_id'];
             $send_data['check'] = 1;
             $message = 'getlocation'; 
@@ -50,7 +51,7 @@ class TeleController extends Controller
         }
 
 
-$send_data['chat_id'] = $dat['message']['chat']['id'] ?? $dat['callback_query']['from']['id'];
+$send_data['chat_id'] = $chat_id;
 //$callback = mb_strtolower($dat['callback_query']['data'] ?? $dat['message']['text'], 'utf-8' );
 // if (strpos($callback, '|') !== false) {
 //     $mess = explode('|', $callback);
@@ -119,22 +120,22 @@ $send_data['chat_id'] = $dat['message']['chat']['id'] ?? $dat['callback_query'][
 
     private function sendTelegram($method,$data,$buttons){
 
-       // if($data['check'] === 1){
+       if($data['check'] === 1){
 
-    	return Telegram::sendMessage([
-        	'chat_id' => env('CHAT_ID'), //$data['chat_id'],
+    	    return Telegram::sendMessage([
+        	       'chat_id' => env('CHAT_ID'), //$data['chat_id'],
                     'text' => $data['text'],
                     'parse_mode' => 'HTML',
                     'reply_markup' => json_encode($buttons),
-        ]);
-   // }else{
-        // return Telegram::editMessageText([
-        //                 'chat_id' => $data['chat_id'],
-        //                 'message_id' => $data['message_id'],
-        //                 'text' => $data['text'],
-        //                 'reply_markup' => json_encode($buttons),
-        //             ]);
-   // }
+            ]);
+        }else{
+            return Telegram::editMessageText([
+                        'chat_id' => $data['chat_id'],
+                        'message_id' => $data['message_id'],
+                        'text' => $data['text'],
+                        'reply_markup' => json_encode($buttons),
+            ]);
+        }
 
 
     	
