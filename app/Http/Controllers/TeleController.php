@@ -94,26 +94,20 @@ class TeleController extends Controller
                         ));
 
                         $respon = curl_exec($curl);
-                        $respon = json_decode($respon, true);
                         
-                        if (curl_errno($curl)) {
-	                       $send_data['text'] = 'nothing..';
-	                       break;
-                        } 
 
                         curl_close($curl);
+                        $respon = json_decode($respon, true);
                         $buttons = Keyboard::make()->inline();
                         foreach ($respon['items'] as $items => $item) {
                             $title = $item['snippet']['title'];
-                            $chanel_title = $item['snippet']['channelTitle'];
-                            $shrt_title = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $title);
                             $shrt_title = preg_replace('/^([ ]+)|([ ]){2,}/m', '$2', $shrt_title);
                             $shrt_title = mb_substr($shrt_title, 0, 30);
                             
 
                             $buttons->row(Keyboard::inlineButton(['text' => $shrt_title, 'callback_data' => $item['id']['videoId']]));
                         }
-
+                        $data['text'] = 'Що є по '.$word1;
                         break;
 	        }
 	
