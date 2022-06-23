@@ -25,37 +25,50 @@ class TeleController extends Controller
         $knopki = false;
 
 
-        // if(isset($dat['callback_query'])) {
-        // 	$chat_id = $dat['callback_query']['from']['id'];
-        // 	$message = mb_strtolower($dat['callback_query']['data'] , 'utf-8' );
-        //     $data = $dat['callback_query'];
-        // }elseif(isset($dat['message']['text'])){
-        // 	$chat_id = $dat['message']['chat']['id'];
-        // 	$message = mb_strtolower($dat['message']['text'] , 'utf-8' );
-        //     $data = $dat['message'];
+        if(isset($dat['callback_query'])) {
+        	// $chat_id = $dat['callback_query']['from']['id'];
+        	// $message = mb_strtolower($dat['callback_query']['data'] , 'utf-8' );
+         //    $data = $dat['callback_query'];
+            $mess = explode('|', $dat['callback_query']['data']);
+            $message = $mess[0];
+            $send_data['message_id'] = $mess[1];
+            $send_data['check'] = 0;
+        }elseif(isset($dat['message']['text'])){
+        	// $chat_id = $dat['message']['chat']['id'];
+        	// $message = mb_strtolower($dat['message']['text'] , 'utf-8' );
+         //    $data = $dat['message'];
+            $send_data['message_id'] = $dat['message']['message_id'];
+            $message = mb_strtolower($dat['message']['text'] , 'utf-8' );
+            $send_data['check'] = 1;
             
-        // }else
+        }elseif($dat['message']['location'] !== false){
+            $send_data['message_id'] = $dat['message']['message_id'];
+            $send_data['check'] = 1;
+            $message = 'getlocation'; 
+            $latitude = $dat['message']['location']['latitude'];
+            $longitude = $dat['message']['location']['longitude'];
+        }
 
 
 $send_data['chat_id'] = $dat['message']['chat']['id'] ?? $dat['callback_query']['from']['id'];
-$callback = mb_strtolower($dat['callback_query']['data'] ?? $dat['message']['text'], 'utf-8' );
-if (strpos($callback, '|') !== false) {
-    $mess = explode('|', $callback);
-    $message = $mess[0];
-    $send_data['message_id'] = $mess[1];
-    $send_data['check'] = 0;
-}else{
-    $send_data['message_id'] = $dat['message']['message_id'];
-    $message = $callback;
-    $send_data['check'] = 1;
-}
+//$callback = mb_strtolower($dat['callback_query']['data'] ?? $dat['message']['text'], 'utf-8' );
+// if (strpos($callback, '|') !== false) {
+//     $mess = explode('|', $callback);
+//     $message = $mess[0];
+//     $send_data['message_id'] = $mess[1];
+//     $send_data['check'] = 0;
+// }else{
+//     $send_data['message_id'] = $dat['message']['message_id'];
+//     $message = $callback;
+//     $send_data['check'] = 1;
+// }
 
-        if($dat['message']['location'] !== false){
-        	//$chat_id = $dat['message']['chat']['id'];
-        	$message = 'getlocation'; 
-        	$latitude = $dat['message']['location']['latitude'];
-        	$longitude = $dat['message']['location']['longitude'];
-        }
+        // if($dat['message']['location'] !== false){
+        // 	//$chat_id = $dat['message']['chat']['id'];
+        // 	$message = 'getlocation'; 
+        // 	$latitude = $dat['message']['location']['latitude'];
+        // 	$longitude = $dat['message']['location']['longitude'];
+        // }
 
         // $send_data['chat_id'] = $dat['message']['chat']['id'] ?? $dat['callback_query']['from']['id'];
         // //$send_data['message_id'] = $dat['message']['message_id'] ?? $dat['callback_query']['message']['message_id'];
@@ -99,7 +112,7 @@ if (strpos($callback, '|') !== false) {
 	                break;
 	        }
 	    
-        $send_data['chat_id'] = $chat_id;
+       // $send_data['chat_id'] = $chat_id;
 
         return $this->sendTelegram($method,$send_data,$buttons);
     }
