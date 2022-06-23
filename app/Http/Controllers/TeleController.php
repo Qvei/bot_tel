@@ -107,7 +107,7 @@ class TeleController extends Controller
 
                             $buttons->row(Keyboard::inlineButton(['text' => $shrt_title, 'callback_data' => $item['id']['videoId']]));
                         }
-                        $data['text'] = 'Що є по '.$word1;
+                        $send_data['text'] = 'Що є по '.$word1;
                         break;
 	        }
 	
