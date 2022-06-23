@@ -32,19 +32,19 @@ class TeleController extends Controller
             $mess = explode('|', $dat['callback_query']['data']);
             $message = $mess[0];
             $send_data['message_id'] = $mess[1];
-            $send_data['check'] = 0;
+            $ono = 0;
         }elseif(isset($dat['message']['text'])){
         	$chat_id = $dat['message']['chat']['id'];
         	// $message = mb_strtolower($dat['message']['text'] , 'utf-8' );
          //    $data = $dat['message'];
             $send_data['message_id'] = $dat['message']['message_id'];
             $message = mb_strtolower($dat['message']['text'] , 'utf-8' );
-            $send_data['check'] = 1;
+            $ono = 1;
             
         }elseif($dat['message']['location'] !== false){
             $chat_id = $dat['message']['chat']['id'];
             $send_data['message_id'] = $dat['message']['message_id'];
-            $send_data['check'] = 1;
+            $ono = 1;
             $message = 'getlocation'; 
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
@@ -52,6 +52,7 @@ class TeleController extends Controller
 
 
 $send_data['chat_id'] = $chat_id;
+$send_data['che'] = $ono;
 //$callback = mb_strtolower($dat['callback_query']['data'] ?? $dat['message']['text'], 'utf-8' );
 // if (strpos($callback, '|') !== false) {
 //     $mess = explode('|', $callback);
@@ -120,7 +121,7 @@ $send_data['chat_id'] = $chat_id;
 
     private function sendTelegram($method,$data,$buttons){
 
-       if($data['check'] === 1){
+       //if($data['che'] === 1){
 
     	    return Telegram::sendMessage([
         	       'chat_id' => env('CHAT_ID'), //$data['chat_id'],
@@ -128,14 +129,14 @@ $send_data['chat_id'] = $chat_id;
                     'parse_mode' => 'HTML',
                     'reply_markup' => json_encode($buttons),
             ]);
-        }else{
+       // }else{
             return Telegram::editMessageText([
                         'chat_id' => $data['chat_id'],
                         'message_id' => $data['message_id'],
                         'text' => $data['text'],
                         'reply_markup' => json_encode($buttons),
             ]);
-        }
+      //  }
 
 
     	
