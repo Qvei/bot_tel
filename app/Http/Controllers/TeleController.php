@@ -119,7 +119,7 @@ $send_data['chat_id'] = $dat['message']['chat']['id'] ?? $dat['callback_query'][
 
     private function sendTelegram($method,$data,$buttons){
 
-        if($data['check'] === 1){
+       // if($data['check'] === 1){
 
     	return Telegram::sendMessage([
         	'chat_id' => $data['chat_id'],
@@ -127,14 +127,14 @@ $send_data['chat_id'] = $dat['message']['chat']['id'] ?? $dat['callback_query'][
                     'parse_mode' => 'HTML',
                     'reply_markup' => json_encode($buttons),
         ]);
-    }else{
-        return Telegram::editMessageText([
-                        'chat_id' => $data['chat_id'],
-                        'message_id' => $data['message_id'],
-                        'text' => $data['text'],
-                        'reply_markup' => json_encode($buttons),
-                    ]);
-    }
+   // }else{
+        // return Telegram::editMessageText([
+        //                 'chat_id' => $data['chat_id'],
+        //                 'message_id' => $data['message_id'],
+        //                 'text' => $data['text'],
+        //                 'reply_markup' => json_encode($buttons),
+        //             ]);
+   // }
 
 
     	
