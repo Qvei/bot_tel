@@ -18,20 +18,20 @@ class TeleController extends Controller
     	$content = Telegram::getWebhookUpdates();
         $dat = json_decode($content, true);
         
-        if(isset($dat['callback_query'])) {
+        if(isset($dat['callback_query'])){
         	$chat_id = $dat['callback_query']['from']['id'];
-        	$message = mb_strtolower($dat['callback_query']['data'] , 'utf-8' );
+        	$message = $dat['callback_query']['data'];
+
         }elseif(isset($dat['message']['text'])){
         	$chat_id = $dat['message']['chat']['id'];
             $message = $dat['message']['text'];
-        }
 
-        // elseif($dat['message']['location'] !== false){
-        //     $chat_id = $dat['message']['chat']['id'];
-        //     $message = 'getlocation'; 
-        //     $latitude = $dat['message']['location']['latitude'];
-        //     $longitude = $dat['message']['location']['longitude'];
-        // }
+        }elseif($dat['message']['location'] !== false){
+            $message = 'getlocation';
+            $chat_id = $dat['message']['chat']['id'];
+            $latitude = $dat['message']['location']['latitude'];
+            $longitude = $dat['message']['location']['longitude'];
+        }
 
 
         $buttons = Keyboard::make()->inline();
@@ -39,32 +39,30 @@ class TeleController extends Controller
                       Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
                       Keyboard::inlineButton(['text' => 'На сайт 🌍', 'url' => "https://info-misto.com/"]));
         
-	        switch ($message='/start'){
+	        switch ($message){
 	            case '/start':
 	                $send_data = [ 'text' => 'Погода і рівень забруднення за місцем знаходження' ];
 	                break;
 	            case 'location':
-	            	$btn = Keyboard::button([ 'text' => 'Підтвердіть відправку', 'request_location' => true ]);
-                	$buttons = Keyboard::make([ 'keyboard' => [[$btn]], 'resize_keyboard' => true, 'one_time_keyboard' => true, 'hide_keyboard' => true ]);
+	            	$btn = Keyboard::button(['text' => 'Підтвердіть відправку', 'request_location' => true]);
+                	$buttons = Keyboard::make(['keyboard' => [[$btn]], 'resize_keyboard' => true, 'one_time_keyboard' => true, 'hide_keyboard' => true]);
 	                $send_data = ['text' => 'Очікую підтвердження..'.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447))];
 	                break;
 	            case 'getlocation':
 	            	$api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
 	                $ans = $api_answers->addaAnsver();
 	            	$wear_ans = $api_answers->addWeatherAnswer();
-                    $send_data = [ 'text'=> $ans."\n\n".$wear_ans, ];
+                    $send_data = ['text'=> $ans."\n\n".$wear_ans];
 	                break;
                 case 'test':
-                    $send_data = [ 'text'=> 'https://epic.gsfc.nasa.gov/archive/natural/2022/06/21/png/epic_1b_20220621102538.png', ];
+                    $send_data = ['text'=> 'https://epic.gsfc.nasa.gov/archive/natural/2022/06/21/png/epic_1b_20220621102538.png'];
                     break;
 	            default:
-	                $send_data = [ 'text'=>'Try another text' ];
+	                $send_data = ['text'=>'Оберіть щоь..'];
 	                break;
 	        }
-	    
-
-            $send_data['chat_id'] = env('CHAT_ID'); //$chat_id;
-
+	
+            $send_data['chat_id'] = $chat_id;
         return $this->sendTelegram($send_data,$buttons);
     }
 
