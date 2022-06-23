@@ -24,12 +24,14 @@ class TeleController extends Controller
         }elseif(isset($dat['message']['text'])){
         	$chat_id = $dat['message']['chat']['id'];
             $message = $dat['message']['text'];
-        }elseif($dat['message']['location'] !== false){
-            $chat_id = $dat['message']['chat']['id'];
-            $message = 'getlocation'; 
-            $latitude = $dat['message']['location']['latitude'];
-            $longitude = $dat['message']['location']['longitude'];
         }
+
+        // elseif($dat['message']['location'] !== false){
+        //     $chat_id = $dat['message']['chat']['id'];
+        //     $message = 'getlocation'; 
+        //     $latitude = $dat['message']['location']['latitude'];
+        //     $longitude = $dat['message']['location']['longitude'];
+        // }
 
 
         $buttons = Keyboard::make()->inline();
