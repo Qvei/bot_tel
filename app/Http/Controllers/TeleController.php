@@ -122,7 +122,7 @@ $send_data['chat_id'] = $dat['message']['chat']['id'] ?? $dat['callback_query'][
        // if($data['check'] === 1){
 
     	return Telegram::sendMessage([
-        	'chat_id' => env('CHAT_ID'); //$data['chat_id'],
+        	'chat_id' => env('CHAT_ID'), //$data['chat_id'],
                     'text' => $data['text'],
                     'parse_mode' => 'HTML',
                     'reply_markup' => json_encode($buttons),
