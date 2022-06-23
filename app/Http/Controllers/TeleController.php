@@ -7,7 +7,6 @@ use Telegram\Bot\Api;
 use Telegram;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
-use App\Inbox;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Keyboard\Keyboard;
 
@@ -17,75 +16,25 @@ class TeleController extends Controller
     public function get_data_from_tg(Request $request){
 
     	$content = Telegram::getWebhookUpdates();
-
-
-    	//$lock = false;
-        //$content = file_get_contents("php://input", true);
         $dat = json_decode($content, true);
-        $knopki = false;
-
-
+        
         if(isset($dat['callback_query'])) {
         	$chat_id = $dat['callback_query']['from']['id'];
-        	// $message = mb_strtolower($dat['callback_query']['data'] , 'utf-8' );
-         //    $data = $dat['callback_query'];
-            $mess = explode('|', $dat['callback_query']['data']);
-            $message = $mess[0];
-            $send_data['message_id'] = $mess[1];
-            $ono = 0;
+        	$message = mb_strtolower($dat['callback_query']['data'] , 'utf-8' );
         }elseif(isset($dat['message']['text'])){
         	$chat_id = $dat['message']['chat']['id'];
-        	// $message = mb_strtolower($dat['message']['text'] , 'utf-8' );
-         //    $data = $dat['message'];
-            $send_data['message_id'] = $dat['message']['message_id'];
             $message = mb_strtolower($dat['message']['text'] , 'utf-8' );
-            $ono = 1;
-            
         }elseif($dat['message']['location'] !== false){
             $chat_id = $dat['message']['chat']['id'];
-            $send_data['message_id'] = $dat['message']['message_id'];
-            $ono = 1;
             $message = 'getlocation'; 
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
         }
 
-//$callback = mb_strtolower($dat['callback_query']['data'] ?? $dat['message']['text'], 'utf-8' );
-// if (strpos($callback, '|') !== false) {
-//     $mess = explode('|', $callback);
-//     $message = $mess[0];
-//     $send_data['message_id'] = $mess[1];
-//     $send_data['check'] = 0;
-// }else{
-//     $send_data['message_id'] = $dat['message']['message_id'];
-//     $message = $callback;
-//     $send_data['check'] = 1;
-// }
 
-        // if($dat['message']['location'] !== false){
-        // 	//$chat_id = $dat['message']['chat']['id'];
-        // 	$message = 'getlocation'; 
-        // 	$latitude = $dat['message']['location']['latitude'];
-        // 	$longitude = $dat['message']['location']['longitude'];
-        // }
-
-        // $send_data['chat_id'] = $dat['message']['chat']['id'] ?? $dat['callback_query']['from']['id'];
-        // //$send_data['message_id'] = $dat['message']['message_id'] ?? $dat['callback_query']['message']['message_id'];
-        // $callback = mb_strtolower($dat['callback_query']['data'] ?? $dat['message']['text'], 'utf-8' );
-        // if (strpos($callback, '|') !== false) {
-        //     $mess = explode('|', $callback);
-        //     $message = $mess[0];
-        //     $send_data['message_id'] = $mess[1];
-        // }else{
-        //     $send_data['message_id'] = $dat['message']['message_id'];
-        //     $message = $callback;
-        // }
-
-        //$message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
-        $method = 'sendMessage';
         $buttons = Keyboard::make()->inline();
-        $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location|".$send_data['message_id']]),
-                      Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test|".$send_data['message_id']]),
+        $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]),
+                      Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
                       Keyboard::inlineButton(['text' => 'На сайт 🌍', 'url' => "https://info-misto.com/"]));
         
 	        switch ($message){
@@ -95,7 +44,7 @@ class TeleController extends Controller
 	            case 'location':
 	            	$btn = Keyboard::button([ 'text' => 'Підтвердіть відправку', 'request_location' => true ]);
                 	$buttons = Keyboard::make([ 'keyboard' => [[$btn]], 'resize_keyboard' => true, 'one_time_keyboard' => true, 'hide_keyboard' => true  ]);
-	                $send_data = ['text' => 'Ви тут'.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447))];
+	                $send_data = ['text' => 'Очікую підтвердження..'.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447))];
 	                break;
 	            case 'getlocation':
 	            	$api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
@@ -111,35 +60,21 @@ class TeleController extends Controller
 	                break;
 	        }
 	    
-       // $send_data['chat_id'] = $chat_id;
 
             $send_data['chat_id'] = $chat_id;
-            $send_data['che'] = $ono;
 
         return $this->sendTelegram($method,$send_data,$buttons);
     }
 
-    private function sendTelegram($method,$data,$buttons){
 
-       if($data['che'] === 1){
 
+    private function sendTelegram($data,$buttons){
     	    return Telegram::sendMessage([
         	       'chat_id' => $data['chat_id'],
                     'text' => $data['text'],
                     'parse_mode' => 'HTML',
                     'reply_markup' => json_encode($buttons),
             ]);
-        }else{
-            return Telegram::editMessageText([
-                        'chat_id' => $data['chat_id'],
-                        'message_id' => $data['message_id'],
-                        'text' => $data['text'],
-                        'reply_markup' => json_encode($buttons),
-            ]);
-        }
-
-
-    	
     }
 
 }
