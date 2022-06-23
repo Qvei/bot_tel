@@ -17,18 +17,21 @@ class TeleController extends Controller
 
     	$content = Telegram::getWebhookUpdates();
         $dat = json_decode($content, true);
-        
-        if(isset($dat['callback_query'])){
-        	$chat_id = $dat['callback_query']['from']['id'];
-        	$message = $dat['callback_query']['data'];
 
-        }elseif(isset($dat['message']['text'])){
-        	$chat_id = $dat['message']['chat']['id'];
-            $message = $dat['message']['text'];
+        $message = $dat['callback_query']['data'] ?? $dat['message']['text'];
+        mb_strtolower($message, 'utf-8');
+        // if(isset($dat['callback_query'])){
+        // 	//$chat_id = $dat['callback_query']['from']['id'];
+        // 	//$message = $dat['callback_query']['data'];
 
-        }elseif($dat['message']['location'] !== false){
+        // }elseif(isset($dat['message']['text'])){
+        // 	//$chat_id = $dat['message']['chat']['id'];
+        //     //$message = $dat['message']['text'];
+
+        // }else
+        if($dat['message']['location'] !== false){
             $message = 'getlocation';
-            $chat_id = $dat['message']['chat']['id'];
+            //$chat_id = $dat['message']['chat']['id'];
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
         }
@@ -62,7 +65,7 @@ class TeleController extends Controller
 	                break;
 	        }
 	
-            $send_data['chat_id'] = $chat_id;
+            $send_data['chat_id'] = $dat['callback_query']['from']['id'] ?? $dat['message']['chat']['id'];
         return $this->sendTelegram($send_data,$buttons);
     }
 
