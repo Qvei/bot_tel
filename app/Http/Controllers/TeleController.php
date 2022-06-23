@@ -39,7 +39,7 @@ class TeleController extends Controller
                       Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
                       Keyboard::inlineButton(['text' => 'На сайт 🌍', 'url' => "https://info-misto.com/"]));
         
-	        switch ($message){
+	        switch ($message='/start'){
 	            case '/start':
 	                $send_data = [ 'text' => 'Погода і рівень забруднення за місцем знаходження' ];
 	                break;
