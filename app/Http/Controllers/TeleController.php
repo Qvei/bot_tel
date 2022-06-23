@@ -19,10 +19,14 @@ class TeleController extends Controller
         $dat = json_decode($content, true);
 
         if(isset($dat['callback_query'])){
+            // $callback_cl = new CallbackMess($dat['callback_query']['from']['id'], $dat['callback_query']['data']);
+            // $send_data = $callback_cl->callmess(); 
         	$chat_id = $dat['callback_query']['from']['id'];
         	$message = $dat['callback_query']['data'];
 
         }elseif(isset($dat['message']['text'])){
+            // $simplmes_cl = new SimplyMess($dat['message']['chat']['id'], $dat['message']['text']);
+            // $send_data = $simplmes_cl->simmess();
         	$chat_id = $dat['message']['chat']['id'];
             $message = $dat['message']['text'];
 
@@ -33,7 +37,7 @@ class TeleController extends Controller
             $longitude = $dat['message']['location']['longitude'];
         }
 
-        $this->tolover($message);
+        $message = $this->tolover($message);
         $buttons = Keyboard::make()->inline();
         $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]),
                       Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
