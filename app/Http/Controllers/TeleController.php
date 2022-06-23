@@ -83,7 +83,7 @@ $send_data['chat_id'] = $dat['message']['chat']['id'] ?? $dat['callback_query'][
         // }
 
         //$message = mb_strtolower(($data['text'] ?? $data['data']) , 'utf-8' );
-        //$method = 'sendMessage';
+        $method = 'sendMessage';
         $buttons = Keyboard::make()->inline();
         $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location|".$send_data['message_id']]),
                       Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test|".$send_data['message_id']]),
