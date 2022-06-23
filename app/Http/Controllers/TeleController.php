@@ -23,8 +23,8 @@ class TeleController extends Controller
         	$message = mb_strtolower($dat['callback_query']['data'] , 'utf-8' );
         }elseif(isset($dat['message']['text'])){
         	$chat_id = $dat['message']['chat']['id'];
-            $message = mb_strtolower($dat['message']['text'] , 'utf-8' );
-        }elseif(isset($dat['message']['location']) && $dat['message']['location'] !== false){
+            $message = $dat['message']['text'];
+        }elseif($dat['message']['location'] !== false){
             $chat_id = $dat['message']['chat']['id'];
             $message = 'getlocation'; 
             $latitude = $dat['message']['location']['latitude'];
@@ -43,7 +43,7 @@ class TeleController extends Controller
 	                break;
 	            case 'location':
 	            	$btn = Keyboard::button([ 'text' => 'Підтвердіть відправку', 'request_location' => true ]);
-                	$buttons = Keyboard::make([ 'keyboard' => [[$btn]], 'resize_keyboard' => true, 'one_time_keyboard' => true, 'hide_keyboard' => true  ]);
+                	$buttons = Keyboard::make([ 'keyboard' => [[$btn]], 'resize_keyboard' => true, 'one_time_keyboard' => true, 'hide_keyboard' => true ]);
 	                $send_data = ['text' => 'Очікую підтвердження..'.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447))];
 	                break;
 	            case 'getlocation':
@@ -73,7 +73,7 @@ class TeleController extends Controller
         	       'chat_id' => $data['chat_id'],
                     'text' => $data['text'],
                     'parse_mode' => 'HTML',
-                    'reply_markup' => json_encode($buttons),
+                    'reply_markup' => json_encode($buttons)
             ]);
     }
 
