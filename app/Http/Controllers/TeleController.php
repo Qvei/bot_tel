@@ -19,13 +19,9 @@ class TeleController extends Controller
 
     	$content = Telegram::getWebhookUpdates();
         $dat = json_decode($content, true);
+
         $send_data = $this->check_query($dat);
         $buttons = $this->add_start_buttn();
-        //$message = $this->tolover($message);
-        // $buttons = Keyboard::make()->inline();
-        // $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]),
-        //               Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
-        //               Keyboard::inlineButton(['text' => 'На сайт 🌍', 'url' => "https://info-misto.com/"]));
         
 	        switch ($send_data['message']){
 	            case '/start':
@@ -68,17 +64,20 @@ class TeleController extends Controller
                 $youtube = $explod[0];
             }
             $chat_id = $dat['callback_query']['from']['id'];
+            $name = $dat['callback_query']['from']['first_name'] ?? '';
         }elseif(isset($dat['message']['text'])){
             $chat_id = $dat['message']['chat']['id'];
             $message = $dat['message']['text'];
+            $name = $dat['message']['chat']['first_name'] ?? '';
         }elseif($dat['message']['location'] !== false){
             $message = 'getlocation';
             $chat_id = $dat['message']['chat']['id'];
+            $name = $dat['message']['chat']['first_name'] ?? '';
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
         }
 
-        return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '');
+        return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '', 'name' => $name);
 
     }
 
@@ -94,6 +93,15 @@ class TeleController extends Controller
     }
 
     private function sendTelegram($data,$buttons){
+        //if($data['chat_id'] !== env('CHAT_ID')){
+            Telegram::sendMessage([
+                   'chat_id' => env('CHAT_ID'),
+                    'text' => 'New user - '.$data['name'],
+                    'parse_mode' => 'HTML',
+                    'reply_markup' => json_encode($buttons)
+            ]);
+        //}
+
     	    return Telegram::sendMessage([
         	       'chat_id' => $data['chat_id'],
                     'text' => $data['text'],
