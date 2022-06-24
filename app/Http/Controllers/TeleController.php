@@ -27,9 +27,10 @@ class TeleController extends Controller
                 $explod = explode('||', $dat['callback_query']['data']);
                 $message = $explod[1];
                 $youtube = $explod[0];
+            }else{
+                $message = $dat['callback_query']['data'];
             }
         	$chat_id = $dat['callback_query']['from']['id'];
-        	$message = $dat['callback_query']['data'];
 
         }elseif(isset($dat['message']['text'])){
             // $simplmes_cl = new SimplyMess($dat['message']['chat']['id'], $dat['message']['text']);
