@@ -110,7 +110,7 @@ class TeleController extends Controller
                     //     }
                         $get_buttn = new YoutubeClass($message, env('YOUTUBE_API_KEY'));
                         $buttons = $get_buttn->get_videos();
-                        $send_data['text'] = 'Що є по '.$word1;
+                        $send_data['text'] = 'Що є по '.$message;
                         break;
 	        }
 	
