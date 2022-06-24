@@ -23,11 +23,11 @@ class TeleController extends Controller
         if(isset($dat['callback_query'])){
             // $callback_cl = new CallbackMess($dat['callback_query']['from']['id'], $dat['callback_query']['data']);
             // $send_data = $callback_cl->callmess();
-            // if(strpos($dat['callback_query']['data'], '|') !== false){
-            //     $explod = explode('|', $dat['callback_query']['data']);
-            //     $message = $explod[0];
-            //     $youtube = $explod[1];
-            // }
+            if(strpos($dat['callback_query']['data'], '||') !== false){
+                $explod = explode('||', $dat['callback_query']['data']);
+                $message = $explod[1];
+                $youtube = $explod[0];
+            }
         	$chat_id = $dat['callback_query']['from']['id'];
         	$message = $dat['callback_query']['data'];
 
@@ -74,10 +74,9 @@ class TeleController extends Controller
                 case 'test':
                     $send_data['text'] = 'https://epic.gsfc.nasa.gov/archive/natural/2022/06/21/png/epic_1b_20220621102538.png';
                     break;
-                // case 'youtube':
-                //     $word1 = str_replace(" ", "%20", $repl_1_word);
-                //     $url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".$word1."&type=video&key=".$_ENV['YOUTUBE_API_KEY']."&maxResults=25";
-                //     break;
+                case 'youtube':
+                    $send_data['text'] = "\n\nhttps://www.youtube.com/watch?v=".$youtube;
+                    break;
 	            default:
                     $word1 = str_replace(" ", "%20", $message);
                     $url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".$word1."&type=video&key=".env('YOUTUBE_API_KEY')."&maxResults=25";
@@ -105,7 +104,7 @@ class TeleController extends Controller
                             $shrt_title = mb_substr($shrt_title, 0, 30);
                             
 
-                            $buttons->row(Keyboard::inlineButton(['text' => $shrt_title, 'callback_data' => $item['id']['videoId']]));
+                            $buttons->row(Keyboard::inlineButton(['text' => $shrt_title, 'callback_data' => $item['id']['videoId'].'||youtube']));
                         }
                         $send_data['text'] = 'Що є по '.$word1;
                         break;
