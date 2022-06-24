@@ -59,7 +59,7 @@ class TeleController extends Controller
             $mess = $dat['callback_query']['data'];
             if(strpos($mess, '||') !== false){
                 $explod = explode('||', $mess);
-                $mess = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $explod[1]);
+                $mess = $explod[1];
                 $youtube = $explod[0];
             }
             $chat_id = $dat['callback_query']['from']['id'];
@@ -75,7 +75,13 @@ class TeleController extends Controller
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
         }
-        $message = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $mess);
+
+        if($mess !== '/start'){
+            $message = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $mess);
+        }else{
+            $message = $mess;
+        }
+
         return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '', 'name' => $name);
 
     }
@@ -87,7 +93,7 @@ class TeleController extends Controller
                       Keyboard::inlineButton(['text' => 'На сайт 🌍', 'url' => "https://info-misto.com/"]));
     }
 
-    public function tolover($text){
+    private function tolover($text){
         return mb_strtolower($text, 'utf-8');
     }
 
