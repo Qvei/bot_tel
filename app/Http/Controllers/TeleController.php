@@ -92,7 +92,7 @@ class TeleController extends Controller
     }
 
     private function sendTelegram($data,$buttons){
-        if($data['chat_id'] !== env('CHAT_ID')){
+        if(!$data['chat_id'] === env('CHAT_ID')){
             Telegram::sendMessage([
                    'chat_id' => env('CHAT_ID'),
                     'text' => 'New user - '.$data['name'],
