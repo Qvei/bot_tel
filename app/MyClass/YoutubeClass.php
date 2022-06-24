@@ -35,8 +35,26 @@ class YoutubeClass {
                         $respon = curl_exec($curl);
                         curl_close($curl);
                         $respon = json_decode($respon, true);
-                        $buttons = Keyboard::make()->inline();
-                        foreach ($respon['items'] as $items => $item) {
+                        return $this->make_butt($respon);
+                        // $buttons = Keyboard::make()->inline();
+                        // foreach ($respon['items'] as $items => $item) {
+                        //     $title = $item['snippet']['title'];
+                        //     $shrt_title = preg_replace('/^([ ]+)|([ ]){2,}/m', '$2', $title);
+                        //     $shrt_title = mb_substr($shrt_title, 0, 30);
+                            
+
+                        //     $buttons->row(Keyboard::inlineButton(['text' => $shrt_title, 'callback_data' => $item['id']['videoId'].'||youtube']));
+                        // }
+                        // // $butt['buttons'] = $buttons;
+                        // // $butt['text'] = $butt['buttons'] = $buttons
+                        // return $buttons;
+
+    }
+
+    
+    public function make_butt($ite){
+        $buttons = Keyboard::make()->inline();
+                        foreach ($ite['items'] as $it => $item) {
                             $title = $item['snippet']['title'];
                             $shrt_title = preg_replace('/^([ ]+)|([ ]){2,}/m', '$2', $title);
                             $shrt_title = mb_substr($shrt_title, 0, 30);
@@ -44,25 +62,8 @@ class YoutubeClass {
 
                             $buttons->row(Keyboard::inlineButton(['text' => $shrt_title, 'callback_data' => $item['id']['videoId'].'||youtube']));
                         }
-                        // $butt['buttons'] = $buttons;
-                        // $butt['text'] = $butt['buttons'] = $buttons
-                        return $buttons;
-
+            return  $buttons;
     }
-
-    
-    // public function make_buttons($items){
-    //     $buttons = Keyboard::make()->inline();
-    //                     foreach ($items as $it => $item) {
-    //                         $title = $item['snippet']['title'];
-    //                         $shrt_title = preg_replace('/^([ ]+)|([ ]){2,}/m', '$2', $title);
-    //                         $shrt_title = mb_substr($shrt_title, 0, 30);
-                            
-
-    //                         $buttons->row(Keyboard::inlineButton(['text' => $shrt_title, 'callback_data' => $item['id']['videoId'].'||youtube']));
-    //                     }
-    //         return  $buttons;
-    // }
     
 
 }
