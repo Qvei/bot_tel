@@ -12,15 +12,16 @@ class YoutubeClass {
 
     public $words;
 
-    public function __construct($words){
+    public function __construct($words, $api_key){
         $this->words = $words;
+        $this->api_key = $api_key;
     }
 
 
     public function get_videos(){
 
         //$word1 = str_replace(" ", "%20", $this->words);
-                    $url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".str_replace(" ", "%20", $this->words)."&type=video&key=".env('YOUTUBE_API_KEY')."&maxResults=25";
+                    $url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".str_replace(" ", "%20", $this->words)."&type=video&key=".$this->api_key."&maxResults=25";
                      $curl = curl_init();
                         curl_setopt_array($curl, array(
                             CURLOPT_URL => $url,
@@ -49,7 +50,7 @@ class YoutubeClass {
     }
 
     
-    private function make_buttons($items){
+    public function make_buttons($items){
         $buttons = Keyboard::make()->inline();
                         foreach ($items as $it => $item) {
                             $title = $item['snippet']['title'];

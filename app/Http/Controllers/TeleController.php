@@ -108,7 +108,7 @@ class TeleController extends Controller
 
                     //         $buttons->row(Keyboard::inlineButton(['text' => $shrt_title, 'callback_data' => $item['id']['videoId'].'||youtube']));
                     //     }
-                        $get_buttn = new YoutubeClass($message);
+                        $get_buttn = new YoutubeClass($message, env('YOUTUBE_API_KEY'));
                         $buttons = $get_buttn->get_videos();
                         $send_data['text'] = 'Що є по '.$word1;
                         break;
