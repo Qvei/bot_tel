@@ -51,32 +51,31 @@ class TeleController extends Controller
                     break;
 	        }
 	
-            //$send_data['chat_id'] = $chat_id;
             return $this->sendTelegram($send_data,$buttons);
     }
 
     private function check_query($dat){
         if(isset($dat['callback_query'])){
-            $message = $dat['callback_query']['data'];
-            if(strpos($message, '||') !== false){
-                $explod = explode('||', $dat['callback_query']['data']);
-                $message = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $explod[1]);
+            $mess = $dat['callback_query']['data'];
+            if(strpos($mess, '||') !== false){
+                $explod = explode('||', $mess);
+                $mess = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $explod[1]);
                 $youtube = $explod[0];
             }
             $chat_id = $dat['callback_query']['from']['id'];
             $name = $dat['callback_query']['from']['first_name'] ?? '';
         }elseif(isset($dat['message']['text'])){
             $chat_id = $dat['message']['chat']['id'];
-            $message = $dat['message']['text'];
+            $mess = $dat['message']['text'];
             $name = $dat['message']['chat']['first_name'] ?? '';
         }elseif($dat['message']['location'] !== false){
-            $message = 'getlocation';
+            $mess = 'getlocation';
             $chat_id = $dat['message']['chat']['id'];
             $name = $dat['message']['chat']['first_name'] ?? '';
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
         }
-
+        $message = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $mess);
         return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '', 'name' => $name);
 
     }
@@ -93,14 +92,14 @@ class TeleController extends Controller
     }
 
     private function sendTelegram($data,$buttons){
-        //if($data['chat_id'] !== env('CHAT_ID')){
+        if($data['chat_id'] !== env('CHAT_ID')){
             Telegram::sendMessage([
                    'chat_id' => env('CHAT_ID'),
                     'text' => 'New user - '.$data['name'],
                     'parse_mode' => 'HTML',
                     'reply_markup' => json_encode($buttons)
             ]);
-        //}
+        }
 
     	    return Telegram::sendMessage([
         	       'chat_id' => $data['chat_id'],
