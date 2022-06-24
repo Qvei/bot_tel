@@ -20,31 +20,12 @@ class TeleController extends Controller
     	$content = Telegram::getWebhookUpdates();
         $dat = json_decode($content, true);
         $send_data = $this->check_query($dat);
-        // if(isset($dat['callback_query'])){
-        //     $message = $dat['callback_query']['data'];
-        //     if(strpos($message, '||') !== false){
-        //         $explod = explode('||', $dat['callback_query']['data']);
-        //         $message = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $explod[1]);
-        //         $youtube = $explod[0];
-        //     }
-        // 	$chat_id = $dat['callback_query']['from']['id'];
-        // }elseif(isset($dat['message']['text'])){
-        // 	$chat_id = $dat['message']['chat']['id'];
-        //     $message = $dat['message']['text'];
-        // }elseif($dat['message']['location'] !== false){
-        //     $message = 'getlocation';
-        //     $chat_id = $dat['message']['chat']['id'];
-        //     $latitude = $dat['message']['location']['latitude'];
-        //     $longitude = $dat['message']['location']['longitude'];
-        // }
-
-        // array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '');
-
+        $buttons = $this->add_start_buttn();
         //$message = $this->tolover($message);
-        $buttons = Keyboard::make()->inline();
-        $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]),
-                      Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
-                      Keyboard::inlineButton(['text' => 'На сайт 🌍', 'url' => "https://info-misto.com/"]));
+        // $buttons = Keyboard::make()->inline();
+        // $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]),
+        //               Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
+        //               Keyboard::inlineButton(['text' => 'На сайт 🌍', 'url' => "https://info-misto.com/"]));
         
 	        switch ($send_data['message']){
 	            case '/start':
@@ -99,6 +80,13 @@ class TeleController extends Controller
 
         return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '');
 
+    }
+
+    private function add_start_buttn(){
+        $buttons = Keyboard::make()->inline();
+        return $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]),
+                      Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
+                      Keyboard::inlineButton(['text' => 'На сайт 🌍', 'url' => "https://info-misto.com/"]));
     }
 
     public function tolover($text){
