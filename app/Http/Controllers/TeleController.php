@@ -64,25 +64,34 @@ class TeleController extends Controller
             }
             $chat_id = $dat['callback_query']['from']['id'];
             $name = $dat['callback_query']['from']['first_name'] ?? '';
+
+            $message_id = $dat['callback_query']['message']['message_id'];
+
         }elseif(isset($dat['message']['text'])){
             $chat_id = $dat['message']['chat']['id'];
             $mess = $dat['message']['text'];
             $name = $dat['message']['chat']['first_name'] ?? '';
+
+            $message_id = $dat['message']['message_id'];
+
         }elseif($dat['message']['location'] !== false){
             $mess = 'getlocation';
             $chat_id = $dat['message']['chat']['id'];
             $name = $dat['message']['chat']['first_name'] ?? '';
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
+
+            $message_id = $dat['message']['message_id'];
         }
 
         if($mess !== '/start'){
+            $message_id = '/start';
             $message = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $mess);
         }else{
             $message = $mess;
         }
 
-        return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '', 'name' => $name);
+        return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '', 'name' => $name, 'message_id' => $message_id ?? '');
 
     }
 
@@ -98,21 +107,44 @@ class TeleController extends Controller
     }
 
     private function sendTelegram($data,$buttons){
-        if(!$data['chat_id'] === env('CHAT_ID')){
-            Telegram::sendMessage([
-                   'chat_id' => env('CHAT_ID'),
-                    'text' => 'New user - '.$data['name'],
-                    'parse_mode' => 'HTML',
-                    'reply_markup' => json_encode($buttons)
-            ]);
-        }
 
-    	    return Telegram::sendMessage([
-        	       'chat_id' => $data['chat_id'],
-                    'text' => $data['text'],
-                    'parse_mode' => 'HTML',
-                    'reply_markup' => json_encode($buttons)
-            ]);
+        if($data['message_id'] === '/start'){
+
+            if(!$data['chat_id'] === env('CHAT_ID')){
+                Telegram::sendMessage([
+                       'chat_id' => env('CHAT_ID'),
+                        'text' => 'New user - '.$data['name'],
+                        'parse_mode' => 'HTML',
+                        'reply_markup' => json_encode($buttons)
+                ]);
+            }
+
+        	    return Telegram::sendMessage([
+            	       'chat_id' => $data['chat_id'],
+                        'text' => $data['text'],
+                        'parse_mode' => 'HTML',
+                        'reply_markup' => json_encode($buttons)
+                ]);
+        }else{
+
+            if(!$data['chat_id'] === env('CHAT_ID')){
+                Telegram::sendMessage([
+                       'chat_id' => env('CHAT_ID'),
+                        'text' => 'New user - '.$data['name'],
+                        'parse_mode' => 'HTML',
+                        'reply_markup' => json_encode($buttons)
+                ]);
+            }
+
+                return Telegram::editMessageText([
+                       'chat_id' => $data['chat_id'],
+                       'message_id' => $data['message_id'],
+                        'text' => $data['text'],
+                        'parse_mode' => 'HTML',
+                        'reply_markup' => json_encode($buttons)
+                ]);
+
+        }
     }
 
 }
