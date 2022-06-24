@@ -30,6 +30,7 @@ class TeleController extends Controller
             }else{
                 $message = $dat['callback_query']['data'];
             }
+            preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $message);
         	$chat_id = $dat['callback_query']['from']['id'];
 
         }elseif(isset($dat['message']['text'])){
