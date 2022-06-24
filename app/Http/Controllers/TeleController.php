@@ -19,38 +19,26 @@ class TeleController extends Controller
 
     	$content = Telegram::getWebhookUpdates();
         $dat = json_decode($content, true);
+        $send_data = $this->check_query($dat);
+        // if(isset($dat['callback_query'])){
+        //     $message = $dat['callback_query']['data'];
+        //     if(strpos($message, '||') !== false){
+        //         $explod = explode('||', $dat['callback_query']['data']);
+        //         $message = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $explod[1]);
+        //         $youtube = $explod[0];
+        //     }
+        // 	$chat_id = $dat['callback_query']['from']['id'];
+        // }elseif(isset($dat['message']['text'])){
+        // 	$chat_id = $dat['message']['chat']['id'];
+        //     $message = $dat['message']['text'];
+        // }elseif($dat['message']['location'] !== false){
+        //     $message = 'getlocation';
+        //     $chat_id = $dat['message']['chat']['id'];
+        //     $latitude = $dat['message']['location']['latitude'];
+        //     $longitude = $dat['message']['location']['longitude'];
+        // }
 
-        if(isset($dat['callback_query'])){
-            // $callback_cl = new CallbackMess($dat['callback_query']['from']['id'], $dat['callback_query']['data']);
-            // $send_data = $callback_cl->callmess();
-            if(strpos($dat['callback_query']['data'], '||') !== false){
-                $explod = explode('||', $dat['callback_query']['data']);
-                $message = $explod[1];
-                $youtube = $explod[0];
-            }else{
-                $message = $dat['callback_query']['data'];
-            }
-            preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $message);
-        	$chat_id = $dat['callback_query']['from']['id'];
-
-        }elseif(isset($dat['message']['text'])){
-            // $simplmes_cl = new SimplyMess($dat['message']['chat']['id'], $dat['message']['text']);
-            // $send_data = $simplmes_cl->simmess();
-
-        	$chat_id = $dat['message']['chat']['id'];
-            $message = $dat['message']['text'];
-
-        }elseif($dat['message']['location'] !== false){
-            $message = 'getlocation';
-            $chat_id = $dat['message']['chat']['id'];
-            $latitude = $dat['message']['location']['latitude'];
-            $longitude = $dat['message']['location']['longitude'];
-
-            // $api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
-            //         $ans = $api_answers->addaAnsver();
-            //         $wear_ans = $api_answers->addWeatherAnswer();
-            //         $send_data = ['text'=> $ans."\n\n".$wear_ans];
-        }
+        // array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '');
 
         //$message = $this->tolover($message);
         $buttons = Keyboard::make()->inline();
@@ -58,7 +46,7 @@ class TeleController extends Controller
                       Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
                       Keyboard::inlineButton(['text' => 'На сайт 🌍', 'url' => "https://info-misto.com/"]));
         
-	        switch ($message){
+	        switch ($send_data['message']){
 	            case '/start':
 	                $send_data['text'] = 'Погода і рівень забруднення за місцем знаходження';
 	                break;
@@ -68,7 +56,7 @@ class TeleController extends Controller
 	                $send_data['text'] = 'Очікую підтвердження..'.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447));
 	                break;
 	            case 'getlocation':
-	            	$api_answers = new NewClass($latitude, $longitude, env('WEATHER_KEY'));
+	            	$api_answers = new NewClass($send_data['latitude'], $send_data['longitude'], env('WEATHER_KEY'));
 	                $ans = $api_answers->addaAnsver();
 	            	$wear_ans = $api_answers->addWeatherAnswer();
                     $send_data['text'] = $ans."\n\n".$wear_ans;
@@ -77,45 +65,40 @@ class TeleController extends Controller
                     $send_data['text'] = 'https://epic.gsfc.nasa.gov/archive/natural/2022/06/21/png/epic_1b_20220621102538.png';
                     break;
                 case 'youtube':
-                    $send_data['text'] = "\n\nhttps://www.youtube.com/watch?v=".$youtube;
+                    $send_data['text'] = "\n\nhttps://www.youtube.com/watch?v=".$send_data['youtube'];
                     break;
 	            default:
-                    // $word1 = str_replace(" ", "%20", $message);
-                    // $url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".$word1."&type=video&key=".env('YOUTUBE_API_KEY')."&maxResults=25";
-                    //  $curl = curl_init();
-                    //     curl_setopt_array($curl, array(
-                    //         CURLOPT_URL => $url,
-                    //         CURLOPT_RETURNTRANSFER => true,
-                    //         CURLOPT_FOLLOWLOCATION => true,
-                    //         CURLOPT_ENCODING => "",
-                    //         CURLOPT_MAXREDIRS => 10,
-                    //         CURLOPT_TIMEOUT => 30,
-                    //         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    //         CURLOPT_CUSTOMREQUEST => "GET"    
-                    //     ));
-
-                    //     $respon = curl_exec($curl);
-                        
-
-                    //     curl_close($curl);
-                    //     $respon = json_decode($respon, true);
-                    //     $buttons = Keyboard::make()->inline();
-                    //     foreach ($respon['items'] as $items => $item) {
-                    //         $title = $item['snippet']['title'];
-                    //         $shrt_title = preg_replace('/^([ ]+)|([ ]){2,}/m', '$2', $title);
-                    //         $shrt_title = mb_substr($shrt_title, 0, 30);
-                            
-
-                    //         $buttons->row(Keyboard::inlineButton(['text' => $shrt_title, 'callback_data' => $item['id']['videoId'].'||youtube']));
-                    //     }
-                        $get_buttn = new YoutubeClass($message, env('YOUTUBE_API_KEY'));
-                        $buttons = $get_buttn->get_videos();
-                        $send_data['text'] = 'Що є по '.$message;
-                        break;
+                    $get_buttn = new YoutubeClass($send_data['message'], env('YOUTUBE_API_KEY'));
+                    $buttons = $get_buttn->get_videos();
+                    $send_data['text'] = 'Що є по '.$send_data['message'];
+                    break;
 	        }
 	
-            $send_data['chat_id'] = $chat_id;
-        return $this->sendTelegram($send_data,$buttons);
+            //$send_data['chat_id'] = $chat_id;
+            return $this->sendTelegram($send_data,$buttons);
+    }
+
+    private function check_query($dat){
+        if(isset($dat['callback_query'])){
+            $message = $dat['callback_query']['data'];
+            if(strpos($message, '||') !== false){
+                $explod = explode('||', $dat['callback_query']['data']);
+                $message = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $explod[1]);
+                $youtube = $explod[0];
+            }
+            $chat_id = $dat['callback_query']['from']['id'];
+        }elseif(isset($dat['message']['text'])){
+            $chat_id = $dat['message']['chat']['id'];
+            $message = $dat['message']['text'];
+        }elseif($dat['message']['location'] !== false){
+            $message = 'getlocation';
+            $chat_id = $dat['message']['chat']['id'];
+            $latitude = $dat['message']['location']['latitude'];
+            $longitude = $dat['message']['location']['longitude'];
+        }
+
+        return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '');
+
     }
 
     public function tolover($text){

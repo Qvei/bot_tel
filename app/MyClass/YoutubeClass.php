@@ -11,6 +11,7 @@ class YoutubeClass {
 
 
     public $words;
+    public $api_key;
 
     public function __construct($words, $api_key){
         $this->words = $words;
@@ -36,30 +37,16 @@ class YoutubeClass {
                         curl_close($curl);
                         $respon = json_decode($respon, true);
                         return $this->make_butt($respon);
-                        // $buttons = Keyboard::make()->inline();
-                        // foreach ($respon['items'] as $items => $item) {
-                        //     $title = $item['snippet']['title'];
-                        //     $shrt_title = preg_replace('/^([ ]+)|([ ]){2,}/m', '$2', $title);
-                        //     $shrt_title = mb_substr($shrt_title, 0, 30);
-                            
-
-                        //     $buttons->row(Keyboard::inlineButton(['text' => $shrt_title, 'callback_data' => $item['id']['videoId'].'||youtube']));
-                        // }
-                        // // $butt['buttons'] = $buttons;
-                        // // $butt['text'] = $butt['buttons'] = $buttons
-                        // return $buttons;
 
     }
 
     
     public function make_butt($ite){
-        $buttons = Keyboard::make()->inline();
+                        $buttons = Keyboard::make()->inline();
                         foreach ($ite['items'] as $it => $item) {
                             $title = $item['snippet']['title'];
                             $shrt_title = preg_replace('/^([ ]+)|([ ]){2,}/m', '$2', $title);
                             $shrt_title = mb_substr($shrt_title, 0, 30);
-                            
-
                             $buttons->row(Keyboard::inlineButton(['text' => $shrt_title, 'callback_data' => $item['id']['videoId'].'||youtube']));
                         }
             return  $buttons;
