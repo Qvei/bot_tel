@@ -70,7 +70,7 @@ class NewClass{
                     $chas = '';
                     $desc = '';
                     $hourly = "<b>Сьогодні</b> \n\n";
-                    $hourly = "<b>Завтра</b> \n\n";
+                    $hourly_tom = "<b>Завтра</b> \n\n";
                     $tomorrow = date("Y-m-d", strtotime('tomorrow'));
                     foreach ($wear_ans['hourly'] as $key => $value) {
                         $now = date('Y-m-d', $value['dt']);
@@ -100,7 +100,7 @@ class NewClass{
                     }else{
                         $rain = 'Сьогодні без дощу ';
                     }
-        $ans_wear = $desc." 🌡 ".$wear." °C \n\n" . $rain ."\n" . $chas. "\n min 🌡" . min($day_temp)." 🌕 \n max 🌡".max($day_temp)." ☀️\n\n".$hourly.$hourly_tom;
+        $ans_wear = $desc." 🌡 ".$wear." °C \n\n" . $rain ."\n" . $chas. "\n min 🌡" . min($day_temp)." 🌕 \n max 🌡".max($day_temp)." ☀️\n\n".$hourly . $hourly_tom;
         return $ans_wear;
     }
 }
