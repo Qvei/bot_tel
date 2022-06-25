@@ -14,8 +14,8 @@ class TeslaController extends Controller
     
     public function getdata(Request $request)
     {
-
-        $data = Http::post('https://owner-api.teslamotors.com/'.$request->oauth.'/'.$request->token);
+    	$data = 'test';
+        //$data = Http::post('https://owner-api.teslamotors.com/'.$request->oauth.'/'.$request->token);
         
         echo json_encode($data ?? 'test');
        // echo $data->access_token;
