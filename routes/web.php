@@ -42,7 +42,7 @@ Route::get('/', function (){
 
 // });
 
-Route::post('/tesla/getdata', [\App\Http\Controllers\TeslaController::class, 'get_data']);
+Route::any('/tesla', [\App\Http\Controllers\TeslaController::class, 'get_data']);
 Route::any('telegramsecret',
     [\App\Http\Controllers\TeleController::class,
         'get_data_from_tg']);
