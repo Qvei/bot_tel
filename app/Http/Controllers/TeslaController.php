@@ -19,7 +19,6 @@ class TeslaController extends Controller
         
         //echo $data;
        // echo $data->access_token;
-       $data = json_encode($data, true);
         echo $data;
 
        
