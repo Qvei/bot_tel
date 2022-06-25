@@ -83,7 +83,11 @@
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
                                     Authentication - API commands to generate an {access_token} to communicate with your vehicle.
-                                    Insert Your Oauth and Token
+                                    <ul>
+                                        <li>
+                                            Insert Your Oauth and Token
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
