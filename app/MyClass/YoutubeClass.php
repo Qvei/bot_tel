@@ -21,7 +21,7 @@ class YoutubeClass {
 
     public function get_videos(){
 
-                    $url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".str_replace(" ", "%20", $this->words)."&type=video&key=".$this->api_key."&maxResults=25";
+                    $url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".str_replace(" ", "%20", $this->words)."&order=date&type=video&key=".$this->api_key."&maxResults=25";
                      $curl = curl_init();
                         curl_setopt_array($curl, array(
                             CURLOPT_URL => $url,

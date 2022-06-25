@@ -130,12 +130,6 @@
                   url:'/tesla',
                   //dataType: 'json',
                   data:{oauth:$('.oauth').val(),token:$('.token').val()},
-                  // beforeSend: function () {
-                  //   $('.wear_now, .main-carousel1').html('<div style="width:100%;text-align:center;"><div class="lds-ring"><div></div><div></div><div></div><div></div>');
-                  // },
-                  // complete: function () {
-                  //   $('.dsda').css({"display":"block"});
-                  // },
                   success: function(resp){
                     $('.response').css({"display":"block"});
                     $('.response').css({"background-color":"yellow"});
