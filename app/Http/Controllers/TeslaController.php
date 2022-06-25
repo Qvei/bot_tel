@@ -12,12 +12,12 @@ use Auth;
 class TeslaController extends Controller
 {
     
-    public function getdata(Request $request)
+    public function get_data(Request $request)
     {
     	$data = 'test';
         //$data = Http::post('https://owner-api.teslamotors.com/'.$request->oauth.'/'.$request->token);
         
-        echo json_encode($data ?? 'test');
+        echo $data;
        // echo $data->access_token;
        //$data = json_encode($data, true);
         

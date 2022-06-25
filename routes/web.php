@@ -21,32 +21,29 @@ Route::get('/', function (){
     return view('welcome');
 });
 
-Route::get('tesla/getdata', function (){
-	// $url = 'https://owner-api.teslamotors.com/'.$request->oauth.'/'.$request->token;
- //                     $curl = curl_init();
- //                        curl_setopt_array($curl, array(
- //                            CURLOPT_URL => $url,
- //                            CURLOPT_RETURNTRANSFER => true,
- //                            CURLOPT_FOLLOWLOCATION => true,
- //                            CURLOPT_ENCODING => "",
- //                            CURLOPT_MAXREDIRS => 10,
- //                            CURLOPT_TIMEOUT => 30,
- //                            //CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
- //                            CURLOPT_CUSTOMREQUEST => "POST"    
- //                        ));
- //                        $respon = curl_exec($curl);
- //                        curl_close($curl);
- //                        $respon = json_decode($respon, true);
+// Route::get('/tesla/getdata', function (){
+// 	// $url = 'https://owner-api.teslamotors.com/'.$request->oauth.'/'.$request->token;
+//  //                     $curl = curl_init();
+//  //                        curl_setopt_array($curl, array(
+//  //                            CURLOPT_URL => $url,
+//  //                            CURLOPT_RETURNTRANSFER => true,
+//  //                            CURLOPT_FOLLOWLOCATION => true,
+//  //                            CURLOPT_ENCODING => "",
+//  //                            CURLOPT_MAXREDIRS => 10,
+//  //                            CURLOPT_TIMEOUT => 30,
+//  //                            //CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//  //                            CURLOPT_CUSTOMREQUEST => "POST"    
+//  //                        ));
+//  //                        $respon = curl_exec($curl);
+//  //                        curl_close($curl);
+//  //                        $respon = json_decode($respon, true);
 
-	echo 'yes';
+// 	echo 'yes';
 
-});
+// });
 
-
+Route::post('/tesla/getdata', [\App\Http\Controllers\TeslaController::class, 'get_data']);
 Route::any('telegramsecret',
     [\App\Http\Controllers\TeleController::class,
         'get_data_from_tg']);
 
-
-
-Route::post('/tesla/getdata', 'TeslaController@getdata');
