@@ -125,9 +125,9 @@
         <script rel="preload" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script>
             $(document).on('click','.getdata', function(){
-                $.ajaxSetup({headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")}}),
+                // $.ajaxSetup({headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")}}),
                 $.ajax({type:"POST",
-                  url:'tesla/getdata',
+                  url:'/tesla/getdata',
                   dataType: 'json',
                   data:{oauth:$('.oauth').val(),token:$('.token').val()},
                   // beforeSend: function () {
