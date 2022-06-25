@@ -20,9 +20,9 @@ class TeleController extends Controller
 
     	$content = Telegram::getWebhookUpdates();
         $dat = json_decode($content, true);
-
+        
         $send_data = $this->check_query($dat);
-        $buttons = $this->add_start_buttn($send_data['message_id']);
+        $buttons = $this->add_start_buttn();
         
 	        switch ($send_data['message']){
 	            case '/start':
@@ -58,15 +58,10 @@ class TeleController extends Controller
     private function check_query($dat){
         if(isset($dat['callback_query'])){
             $mess = $dat['callback_query']['data'];
-            //$message_id = $dat['callback_query']['message']['message_id'];
             if(strpos($mess, '||') !== false){
                 $explod = explode('||', $mess);
                 $mess = $explod[1];
                 $youtube = $explod[0];
-            }elseif(strpos($mess, '^^^') !== false){
-                $explod = explode('^^^', $mess);
-                $mess = $explod[0];
-                $message_id = intval($explod[1]);
             }
             $chat_id = $dat['callback_query']['from']['id'];
             $name = $dat['callback_query']['from']['first_name'] ?? '';
@@ -74,30 +69,28 @@ class TeleController extends Controller
             $chat_id = $dat['message']['chat']['id'];
             $mess = $dat['message']['text'];
             $name = $dat['message']['chat']['first_name'] ?? '';
-           // $message_id = $dat['message']['message_id'];
         }elseif($dat['message']['location'] !== false){
             $mess = 'getlocation';
             $chat_id = $dat['message']['chat']['id'];
-            $message_id = $dat['message']['message_id'];
             $name = $dat['message']['chat']['first_name'] ?? '';
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
         }
-        // $message_id = $dat['message']['message_id'] ?? '';
+
         if($mess !== '/start'){
             $message = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $mess);
         }else{
             $message = $mess;
         }
 
-        return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '', 'name' => $name, 'message_id' => $message_id ?? '');
+        return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '', 'name' => $name);
 
     }
 
-    private function add_start_buttn($message_id){
+    private function add_start_buttn(){
         $buttons = Keyboard::make()->inline();
-        return $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location^^^".$message_id]),
-                      Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test^^^".$message_id]),
+        return $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location"]),
+                      Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test"]),
                       Keyboard::inlineButton(['text' => 'На сайт 🌍', 'url' => "https://info-misto.com/"]));
     }
 
@@ -115,25 +108,12 @@ class TeleController extends Controller
             ]);
         }
 
-        if($data['message_id'] === ''){
-
     	    return Telegram::sendMessage([
         	       'chat_id' => $data['chat_id'],
                     'text' => $data['text'],
                     'parse_mode' => 'HTML',
                     'reply_markup' => json_encode($buttons)
             ]);
-
-        }else{
-
-            return Telegram::editMessageText([
-                   'chat_id' => $data['chat_id'],
-                   'message_id' => $data['message_id']+1,
-                    'text' => $data['text'],
-                    'parse_mode' => 'HTML',
-                    'reply_markup' => json_encode($buttons)
-            ]);
-        }
     }
 
 }
