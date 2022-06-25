@@ -7,6 +7,7 @@ use App\MyClass\NewClass;
 use Illuminate\Http\Request;
 use Telegram\Bot\Api;
 use Telegram;
+use Session;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 use Telegram\Bot\FileUpload\InputFile;
@@ -19,7 +20,7 @@ class TeleController extends Controller
 
     	$content = Telegram::getWebhookUpdates();
         $dat = json_decode($content, true);
-
+        
         $send_data = $this->check_query($dat);
         $buttons = $this->add_start_buttn();
         
