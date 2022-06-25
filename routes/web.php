@@ -25,3 +25,5 @@ Route::get('/', function (){
 Route::any('telegramsecret',
     [\App\Http\Controllers\TeleController::class,
         'get_data_from_tg']);
+
+Route::post('tesla/getdata', 'TeslaController@getdata');
