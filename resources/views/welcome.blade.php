@@ -23,6 +23,16 @@
             .oauth,.token{
                 width: 40%;
             }
+            .response{
+                display:none;
+                color: black;
+                padding: 10px;
+            }
+            .tesla-img{
+                width: 60px;
+                height: auto;
+                margin: 0 0 0 12px;
+            }
             /*.get_data{
                 display: inline-block;
                 margin: 0 0 0 12px;
@@ -78,7 +88,7 @@
                             </div>
                         </div>
 
-                        
+                        <div class="response"></div>
                         
 
                         
@@ -127,7 +137,8 @@
                   //   $('.dsda').css({"display":"block"});
                   // },
                   success: function(resp){
-                    alert(resp);
+                    $('.response').css({"display":"block"});
+                    $('.response').html(resp);
                   }
                 });
             });
