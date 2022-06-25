@@ -128,7 +128,7 @@ class TeleController extends Controller
 
             return Telegram::editMessageText([
                    'chat_id' => $data['chat_id'],
-                   'message_id' => $data['message_id'],
+                   'message_id' => $data['message_id']+1,
                     'text' => $data['text'],
                     'parse_mode' => 'HTML',
                     'reply_markup' => json_encode($buttons)
