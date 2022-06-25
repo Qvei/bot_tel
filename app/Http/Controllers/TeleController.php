@@ -22,7 +22,7 @@ class TeleController extends Controller
         $dat = json_decode($content, true);
 
         $send_data = $this->check_query($dat);
-        $buttons = $this->add_start_buttn();
+        $buttons = $this->add_start_buttn($send_data['message_id']);
         
 	        switch ($send_data['message']){
 	            case '/start':
@@ -94,7 +94,7 @@ class TeleController extends Controller
 
     }
 
-    private function add_start_buttn(){
+    private function add_start_buttn($message_id){
         $buttons = Keyboard::make()->inline();
         return $buttons->row(Keyboard::inlineButton(['text' => 'Погода і забруднення '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "location^^^".$message_id]),
                       Keyboard::inlineButton(['text' => 'test '.iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F447)), 'callback_data' => "test^^^".$message_id]),
