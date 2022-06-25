@@ -79,7 +79,7 @@
                                 <input type="text" class="token" placeholder="token">
                                 <button class="getdata">start</button>
                             </div>
-
+                             <h2 class="response"></h2>
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
                                     Authentication - API commands to generate an {access_token} to communicate with your vehicle.
@@ -92,7 +92,7 @@
                             </div>
                         </div>
 
-                        <div class="response"></div>
+                       
                         
 
                         
@@ -128,7 +128,7 @@
                 $.ajaxSetup({headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")}}),
                 $.ajax({type:"POST",
                   url:'/tesla',
-                  dataType: 'json',
+                  //dataType: 'json',
                   data:{oauth:$('.oauth').val(),token:$('.token').val()},
                   // beforeSend: function () {
                   //   $('.wear_now, .main-carousel1').html('<div style="width:100%;text-align:center;"><div class="lds-ring"><div></div><div></div><div></div><div></div>');
@@ -139,7 +139,7 @@
                   success: function(resp){
                     $('.response').css({"display":"block"});
                     $('.response').css({"background-color":"yellow"});
-                    $('.response').html(resp);
+                    $('.response').text(resp);
                   }
                 });
             });
