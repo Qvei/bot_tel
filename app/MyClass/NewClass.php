@@ -17,27 +17,13 @@ class NewClass{
     public $api_key;
 
     public function __construct($latitude, $longitude, $api_key){
-     $this->latitude = $latitude;
-     $this->longitude = $longitude;
-     $this->api_key = $api_key;
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+        $this->api_key = $api_key;
     }
         
-    public function addaAnsver(){
+    public function addAqiAnsver(){
 
-        // $curl = curl_init();
-        //             curl_setopt_array($curl, array(
-        //             CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key,
-        //             CURLOPT_RETURNTRANSFER => true,
-        //                             CURLOPT_FOLLOWLOCATION => true,
-        //                             CURLOPT_ENCODING => "",
-        //                             CURLOPT_MAXREDIRS => 10,
-        //                             CURLOPT_TIMEOUT => 30,
-        //                             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        //                             CURLOPT_CUSTOMREQUEST => "GET",
-        //         ));
-        //         $resp = curl_exec($curl);
-        //         $err = curl_error($curl);
-        //         curl_close($curl);
                 $url = Http::get("http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key);
                 $resp = json_decode($url, true);
                 foreach ($resp['list'] as $val) {
@@ -67,8 +53,8 @@ class NewClass{
 
 
     public function addWeatherAnswer(){
-        $wear_ans = json_decode(file_get_contents("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key), true);
-
+                $url = Http::get("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key);
+                $wear_ans = json_decode($url, true);
                     $chas = '';
                     $desc = '';
                     $hourly = "<b>Сьогодні</b> \n\n";
@@ -105,4 +91,5 @@ class NewClass{
         $ans_wear = $desc." 🌡 ".$wear." °C \n\n" . $rain ."\n" . $chas. "\n min 🌡" . min($day_temp)." 🌕 \n max 🌡".max($day_temp)." ☀️\n\n".$hourly . $hourly_tom;
         return $ans_wear;
     }
+
 }

@@ -35,7 +35,7 @@ class TeleController extends Controller
 	                break;
 	            case 'getlocation':
 	            	$api_answers = new NewClass($send_data['latitude'], $send_data['longitude'], env('WEATHER_KEY'));
-	                $ans = $api_answers->addaAnsver();
+	                $ans = $api_answers->addAqiAnsver();
 	            	$wear_ans = $api_answers->addWeatherAnswer();
                     $send_data['text'] = $ans."\n\n".$wear_ans;
 	                break;
@@ -63,16 +63,10 @@ class TeleController extends Controller
                 $mess = $explod[1];
                 $youtube = $explod[0];
             }
-            //$chat_id = $dat['callback_query']['from']['id'];
-            //$name = $dat['callback_query']['from']['first_name'] ?? '';
         }elseif(isset($dat['message']['text'])){
-            //$chat_id = $dat['message']['chat']['id'];
             $mess = $dat['message']['text'];
-            //$name = $dat['message']['chat']['first_name'] ?? '';
         }elseif($dat['message']['location'] !== false){
             $mess = 'getlocation';
-            //$chat_id = $dat['message']['chat']['id'];
-            //$name = $dat['message']['chat']['first_name'] ?? '';
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
         }
@@ -102,15 +96,6 @@ class TeleController extends Controller
     }
 
     private function sendTelegram($data,$buttons){
-        if(!$data['chat_id'] === env('CHAT_ID')){
-            Telegram::sendMessage([
-                   'chat_id' => env('CHAT_ID'),
-                    'text' => 'New user - '.$data['name'],
-                    'parse_mode' => 'HTML',
-                    'reply_markup' => json_encode($buttons)
-            ]);
-        }
-
     	    return Telegram::sendMessage([
         	       'chat_id' => $data['chat_id'],
                     'text' => $data['text'],
