@@ -12,16 +12,18 @@ class YoutubeClass {
 
 
     public $words;
-    public $api_key;
+    //public $api_key;
+    const $api_key;
 
     public function __construct($words, $api_key){
         $this->words = $words;
-        $this->api_key = $api_key;
+        //$this->api_key = $api_key;
+        $api_key = env('YOUTUBE_API_KEY');
     }
 
 
     public function get_videos(){
-            $url = Http::get("https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".str_replace(" ", "%20", $this->words)."&order=date&type=video&key=".$this->api_key."&maxResults=25");
+            $url = Http::get("https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".str_replace(" ", "%20", $this->words)."&order=date&type=video&key=".$api_key."&maxResults=25");
             $respon = json_decode($url, true);
             return $this->make_butt($respon);
 
