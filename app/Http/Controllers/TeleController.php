@@ -46,7 +46,7 @@ class TeleController extends Controller
                     $send_data['text'] = "\n\nhttps://www.youtube.com/watch?v=".$send_data['youtube'];
                     break;
 	            default:
-                    $get_buttn = new YoutubeClass($send_data['message'], env('YOUTUBE_API_KEY'));
+                    $get_buttn = new YoutubeClass($send_data['message']);
                     $buttons = $get_buttn->get_videos();
                     $send_data['text'] = 'Що є по '.$send_data['message'];
                     break;
