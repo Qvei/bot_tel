@@ -6,6 +6,7 @@ use Telegram\Bot\Api;
 use Telegram\Bot\Actions;
 use Illuminate\Http\Request;
 use Telegram\Bot\Keyboard\Keyboard;
+use Illuminate\Support\Facades\Http;
 
 class NewClass{
 
@@ -23,21 +24,22 @@ class NewClass{
         
     public function addaAnsver(){
 
-        $curl = curl_init();
-                    curl_setopt_array($curl, array(
-                    CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key,
-                    CURLOPT_RETURNTRANSFER => true,
-                                    CURLOPT_FOLLOWLOCATION => true,
-                                    CURLOPT_ENCODING => "",
-                                    CURLOPT_MAXREDIRS => 10,
-                                    CURLOPT_TIMEOUT => 30,
-                                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                                    CURLOPT_CUSTOMREQUEST => "GET",
-                ));
-                $resp = curl_exec($curl);
-                $err = curl_error($curl);
-                curl_close($curl);
-                $resp = json_decode($resp, true);
+        // $curl = curl_init();
+        //             curl_setopt_array($curl, array(
+        //             CURLOPT_URL => "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key,
+        //             CURLOPT_RETURNTRANSFER => true,
+        //                             CURLOPT_FOLLOWLOCATION => true,
+        //                             CURLOPT_ENCODING => "",
+        //                             CURLOPT_MAXREDIRS => 10,
+        //                             CURLOPT_TIMEOUT => 30,
+        //                             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //                             CURLOPT_CUSTOMREQUEST => "GET",
+        //         ));
+        //         $resp = curl_exec($curl);
+        //         $err = curl_error($curl);
+        //         curl_close($curl);
+                $url = Http::get("http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key);
+                $resp = json_decode($url, true);
                 foreach ($resp['list'] as $val) {
                         $ono = $val['main']['aqi'];
                         $tim = date('Y-m-d');

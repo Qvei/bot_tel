@@ -6,6 +6,7 @@ use Telegram\Bot\Api;
 use Telegram\Bot\Actions;
 use Illuminate\Http\Request;
 use Telegram\Bot\Keyboard\Keyboard;
+use Illuminate\Support\Facades\Http;
 
 class YoutubeClass {
 
@@ -21,21 +22,22 @@ class YoutubeClass {
 
     public function get_videos(){
 
-                    $url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".str_replace(" ", "%20", $this->words)."&order=date&type=video&key=".$this->api_key."&maxResults=25";
-                     $curl = curl_init();
-                        curl_setopt_array($curl, array(
-                            CURLOPT_URL => $url,
-                            CURLOPT_RETURNTRANSFER => true,
-                            CURLOPT_FOLLOWLOCATION => true,
-                            CURLOPT_ENCODING => "",
-                            CURLOPT_MAXREDIRS => 10,
-                            CURLOPT_TIMEOUT => 30,
-                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                            CURLOPT_CUSTOMREQUEST => "GET"    
-                        ));
-                        $respon = curl_exec($curl);
-                        curl_close($curl);
-                        $respon = json_decode($respon, true);
+                    // $url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".str_replace(" ", "%20", $this->words)."&order=date&type=video&key=".$this->api_key."&maxResults=25";
+                     // $curl = curl_init();
+                     //    curl_setopt_array($curl, array(
+                     //        CURLOPT_URL => $url,
+                     //        CURLOPT_RETURNTRANSFER => true,
+                     //        CURLOPT_FOLLOWLOCATION => true,
+                     //        CURLOPT_ENCODING => "",
+                     //        CURLOPT_MAXREDIRS => 10,
+                     //        CURLOPT_TIMEOUT => 30,
+                     //        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                     //        CURLOPT_CUSTOMREQUEST => "GET"    
+                     //    ));
+                     //    $respon = curl_exec($curl);
+                     //    curl_close($curl);
+                    $url = Http::get("https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".str_replace(" ", "%20", $this->words)."&order=date&type=video&key=".$this->api_key."&maxResults=25");
+                        $respon = json_decode($url, true);
                         return $this->make_butt($respon);
 
     }

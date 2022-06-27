@@ -63,19 +63,22 @@ class TeleController extends Controller
                 $mess = $explod[1];
                 $youtube = $explod[0];
             }
-            $chat_id = $dat['callback_query']['from']['id'];
-            $name = $dat['callback_query']['from']['first_name'] ?? '';
+            //$chat_id = $dat['callback_query']['from']['id'];
+            //$name = $dat['callback_query']['from']['first_name'] ?? '';
         }elseif(isset($dat['message']['text'])){
-            $chat_id = $dat['message']['chat']['id'];
+            //$chat_id = $dat['message']['chat']['id'];
             $mess = $dat['message']['text'];
-            $name = $dat['message']['chat']['first_name'] ?? '';
+            //$name = $dat['message']['chat']['first_name'] ?? '';
         }elseif($dat['message']['location'] !== false){
             $mess = 'getlocation';
-            $chat_id = $dat['message']['chat']['id'];
-            $name = $dat['message']['chat']['first_name'] ?? '';
+            //$chat_id = $dat['message']['chat']['id'];
+            //$name = $dat['message']['chat']['first_name'] ?? '';
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
         }
+
+        $chat_id = $dat['callback_query']['from']['id'] ?? $dat['message']['chat']['id'];
+        $name = $dat['callback_query']['from']['first_name'] ?? $dat['message']['chat']['first_name'];
 
         if($mess !== '/start'){
             $message = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $mess);
