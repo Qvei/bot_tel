@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
   $(document).on('click','.basego',function(){
+    $.ajaxSetup({headers:{"X-CSRF-TOKEN":$('meta[name="csrf-token"]').attr("content")}}),
       $.ajax({type:"POST",url:"/connectfilter2",
           data:{localhost:$(".localhost").val(),dbname:$(".dbname").val(),username:$(".username").val(),pas:$(".pas").val()},
           success: function(respa){
