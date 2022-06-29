@@ -23,7 +23,8 @@ class NewClass{
     }
         
     public function addAqiAnsver(){
-                $resp = json_decode(file_get_contents("http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key), true);
+                $uri = file_get_contents("http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key);
+                $resp = json_decode($uri, true);
                 foreach ($resp['list'] as $val) {
                         $ono = $val['main']['aqi'];
                         $tim = date('Y-m-d');

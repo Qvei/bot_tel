@@ -54,9 +54,7 @@ class TeleController extends Controller
             return $this->sendTelegram($send_data,$buttons);
     }
 
-    private function check_query($dat){
-    	$chat_id = $dat['callback_query']['from']['id'];
-    	$name = $dat['callback_query']['from']['first_name'];
+   private function check_query($dat){
         if(isset($dat['callback_query'])){
             $mess = $dat['callback_query']['data'];
             if(strpos($mess, '||') !== false){
@@ -64,14 +62,16 @@ class TeleController extends Controller
                 $mess = $explod[1];
                 $youtube = $explod[0];
             }
+            $chat_id = $dat['callback_query']['from']['id'];
+            $name = $dat['callback_query']['from']['first_name'] ?? '';
         }elseif(isset($dat['message']['text'])){
-        	$chat_id = $dat['message']['chat']['id'];
-        	$name = $dat['message']['chat']['first_name'];
+            $chat_id = $dat['message']['chat']['id'];
             $mess = $dat['message']['text'];
+            $name = $dat['message']['chat']['first_name'] ?? '';
         }elseif($dat['message']['location'] !== false){
-        	$chat_id = $dat['message']['chat']['id'];
-        	$name = $dat['message']['chat']['first_name'];
             $mess = 'getlocation';
+            $chat_id = $dat['message']['chat']['id'];
+            $name = $dat['message']['chat']['first_name'] ?? '';
             $latitude = $dat['message']['location']['latitude'];
             $longitude = $dat['message']['location']['longitude'];
         }
@@ -82,7 +82,7 @@ class TeleController extends Controller
             $message = $mess;
         }
 
-        return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '', 'name' => $name ?? '');
+        return array('message' => $message, 'chat_id' => $chat_id, 'youtube' => $youtube ?? '', 'latitude' => $latitude ?? '', 'longitude' => $longitude ?? '', 'name' => $name);
 
     }
 
