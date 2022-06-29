@@ -31,7 +31,7 @@ $(document).ready(function(){
       $('.onss1').append('<tr><td class="del jj">'+$(this).find(":selected").text()+'</td></tr>');
     }
     if(localStorage.getItem('sx') !== null||localStorage.getItem('clx2') !== null||localStorage.getItem('clx') !== null){
-        $.ajax({type:"POST",url:"connectfilter2.php",data:datt,success:function(resp){
+        $.ajax({type:"POST",url:"connectfilter2",data:datt,success:function(resp){
           if(localStorage.getItem('clx2') !== null){
             $(".s3").css({"display":"block"});$("#s3").html(resp);  
           }else if(localStorage.getItem('clx') !== null){
@@ -50,7 +50,7 @@ $(document).ready(function(){
     $('.del').each(function(){vals.push($(this).text());});
     $('.bel').each(function(){cats.push($(this).text());});
     var datt = {tabll:$('#tabll').val(),vals:vals,ca1:cats};
-      $.ajax({type:"POST",url:"connectfilter2.php",data:datt,success: function(responce){
+      $.ajax({type:"POST",url:"connectfilter2",data:datt,success: function(responce){
           $('#client').html(responce);
           $(".tabbl").html('<button type="button" class="mod-butt two">Create XLS file</button>');
         }
@@ -60,7 +60,7 @@ $(document).ready(function(){
   $(document).on('click', '.mod-butt', function(){
     if($(this).attr('id') !== 'za'){
         var conn = '2';
-        $.ajax({type:"POST",url:"connectfilter2.php",data:{dawadu:conn},success: function(once){
+        $.ajax({type:"POST",url:"connectfilter2",data:{dawadu:conn},success: function(once){
             $('.tabbl').append('<a style="margin:0 0 0 7px;" href="'+once+'.xls">Download</a>');
           }
         });
