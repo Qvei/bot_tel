@@ -24,5 +24,5 @@ Route::any('/telegramsecret', [\App\Http\Controllers\TeleController::class, 'get
 Route::get('/filter', function (){
     return view('filter');
 });
-Route::post('/connectfilter2', [\App\Http\Controllers\FilterController::class, 'get_filter_data']);
+Route::post('/connectfilter2/get_filter_data', [\App\Http\Controllers\FilterController::class, 'get_filter_data']);
 
