@@ -23,9 +23,7 @@ class NewClass{
     }
         
     public function addAqiAnsver(){
-
-                $url = Http::get("http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key);
-                $resp = json_decode($url, true);
+                $resp = json_decode(file_get_contents("http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key), true);
                 foreach ($resp['list'] as $val) {
                         $ono = $val['main']['aqi'];
                         $tim = date('Y-m-d');
@@ -53,7 +51,7 @@ class NewClass{
 
 
     public function addWeatherAnswer(){
-                $url = Http::get("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key);
+                $urll = file_get_contents("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key);
                 $wear_ans = json_decode($url, true);
                     $chas = '';
                     $desc = '';
@@ -90,12 +88,6 @@ class NewClass{
                     }
         $ans_wear = $desc." 🌡 ".$wear." °C \n\n" . $rain ."\n" . $chas. "\n min 🌡" . min($day_temp)." 🌕 \n max 🌡".max($day_temp)." ☀️\n\n".$hourly . $hourly_tom;
         return $ans_wear;
-    }
-
-
-    private function get_apidata($url){
-        $answer = Http::get($url);
-        return json_encode($answer, true);
     }
 
 }
