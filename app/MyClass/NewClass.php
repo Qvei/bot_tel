@@ -24,8 +24,8 @@ class NewClass{
         
     public function addAqiAnsver(){
 
-                $url = "http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key;
-                $resp = $this->get_apidata($url);
+                $url = Http::get("http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key);
+                $resp = json_encode($url, true);
                 foreach ($resp['list'] as $val) {
                         $ono = $val['main']['aqi'];
                         $tim = date('Y-m-d');
@@ -53,8 +53,8 @@ class NewClass{
 
 
     public function addWeatherAnswer(){
-                $url = "https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key;
-                $wear_ans = $this->get_apidata($url);
+                $url = Http::get("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key);
+                $wear_ans = json_encode($url, true);
                     $chas = '';
                     $desc = '';
                     $hourly_today = "<b>Сьогодні</b> \n\n";
