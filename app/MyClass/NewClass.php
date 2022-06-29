@@ -54,7 +54,7 @@ class NewClass{
 
     public function addWeatherAnswer(){
                 $url = Http::get("https://api.openweathermap.org/data/2.5/onecall?lat=".$this->latitude."&lon=".$this->longitude."&exclude=daily&lang=ua&appid=".$this->api_key);
-                $wear_ans = json_encode($url, true);
+                $wear_ans = json_decode($url, true);
                     $chas = '';
                     $desc = '';
                     $hourly_today = "<b>Сьогодні</b> \n\n";
