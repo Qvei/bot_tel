@@ -10,7 +10,7 @@ use Auth;
 
 
 
-class TeslaController extends Controller
+class FilterController extends Controller
 {
     
     public function get_filter_data(Request $request)
