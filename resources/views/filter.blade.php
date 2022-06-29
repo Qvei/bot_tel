@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <title>DB search and xls create</title>
         
-<link rel="stylesheet" href="{{ url('/public/css/allz.css') }}">
+<link rel="stylesheet" href="https://weather-g.herokuapp.com/public/css/allz.css">
   </head>
     <body class="sb-nav-fixed">
       <header>
@@ -84,7 +84,7 @@
         
         
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="scripts.js"></script>
+  <script src="https://weather-g.herokuapp.com/public/scripts.js"></script>
   
     </body>
 </html>
