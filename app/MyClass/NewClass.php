@@ -25,7 +25,7 @@ class NewClass{
     public function addAqiAnsver(){
 
                 $url = Http::get("http://api.openweathermap.org/data/2.5/air_pollution?lat=".$this->latitude."&lon=".$this->longitude."&lang=uk&appid=".$this->api_key);
-                $resp = json_encode($url, true);
+                $resp = json_decode($url, true);
                 foreach ($resp['list'] as $val) {
                         $ono = $val['main']['aqi'];
                         $tim = date('Y-m-d');
