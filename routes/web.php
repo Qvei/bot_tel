@@ -21,4 +21,8 @@ Route::get('/', function (){
 Route::any('/tesla', [\App\Http\Controllers\TeslaController::class, 'get_data']);
 
 Route::any('/telegramsecret', [\App\Http\Controllers\TeleController::class, 'get_data_from_tg']);  //->middleware(['telegases']);
+Route::get('/filter', function (){
+    return view('filter');
+});
+Route::post('/connectfilter2', [\App\Http\Controllers\FilterController::class, 'get_filter_data']);
 
